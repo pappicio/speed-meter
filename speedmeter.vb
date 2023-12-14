@@ -195,7 +195,7 @@ Public Class speedmeter
             Me.Left = TaskBarRect(0).Width - Me.Width
         End If
         Me.TopMost = True
-
+        Me.Visible = True
         Application.DoEvents()
     End Sub
     Dim ritorna As Boolean = False
@@ -500,8 +500,9 @@ ByVal dwReserved As Int32) As Boolean
             Label2.ForeColor = ColorDialog1.Color
             My.Settings.colore = ColorDialog1.Color
             My.Settings.Save()
-            ritorna = False
+
         End If
+        ritorna = False
     End Sub
 
     Private Sub SeelzionaFontTestoToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SeelzionaFontTestoToolStripMenuItem.Click
