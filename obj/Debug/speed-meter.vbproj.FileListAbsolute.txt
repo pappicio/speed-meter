@@ -1,0 +1,12 @@
+D:\speed-meter\speed-meter\obj\Debug\speed_meter.speedmeter.resources
+D:\speed-meter\speed-meter\obj\Debug\speed-meter.vbproj.GenerateResource.cache
+D:\speed-meter\speed-meter\bin\Debug\speed-meter.exe.config
+D:\speed-meter\speed-meter\bin\Debug\speed-meter.exe
+D:\speed-meter\speed-meter\bin\Debug\speed-meter.pdb
+D:\speed-meter\speed-meter\bin\Debug\speed-meter.xml
+D:\speed-meter\speed-meter\obj\Debug\speed_meter.Resources.resources
+D:\speed-meter\speed-meter\obj\Debug\speed-meter.vbproj.CoreCompileInputs.cache
+D:\speed-meter\speed-meter\obj\Debug\speed-meter.exe
+D:\speed-meter\speed-meter\obj\Debug\speed-meter.xml
+D:\speed-meter\speed-meter\obj\Debug\speed-meter.pdb
+D:\speed-meter\speed-meter\obj\Debug\speed-meter.vbproj.AssemblyReference.cache

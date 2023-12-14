@@ -1,0 +1,11 @@
+
+bin/Debug/speed-meter.exe
+bin/Debug/speed-meter.exe.config
+bin/Debug/speed-meter.pdb
+bin/Debug/speed-meter.xml
+bin/Release/speed-meter.exe
+bin/Release/speed-meter.exe.config
+bin/Release/speed-meter.pdb
+bin/Release/speed-meter.xml
+obj/Debug/speed-meter.exe
+obj/Release/speed-meter.exe
