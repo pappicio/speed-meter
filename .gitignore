@@ -9,3 +9,5 @@ bin/Release/speed-meter.pdb
 bin/Release/speed-meter.xml
 obj/Debug/speed-meter.exe
 obj/Release/speed-meter.exe
+.vs/speed-meter/v16/.suo
+.vs/speed-meter/v17/.suo

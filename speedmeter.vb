@@ -107,22 +107,30 @@ Public Class speedmeter
 
         AddHandler NetworkChange.NetworkAvailabilityChanged, AddressOf OnNetWorkChanged_Event
         AddHandler NetworkChange.NetworkAddressChanged, AddressOf OnNetworkAddrChanged_Event
-        loadnic()
+        Invoke(New MethodInvoker(Sub()
+
+                                     loadnic()
+
+                                 End Sub))
         posiziona()
         Timer2_Tick(Nothing, Nothing)
     End Sub
 
     Private Sub OnNetworkAddrChanged_Event(ByVal sender As Object, ByVal e As EventArgs)
-        loadnic()
+
         Invoke(New MethodInvoker(Sub()
 
-                                     Dim ip = net.GetIPProperties.UnicastAddresses(0).Address.ToString
+                                     loadnic()
 
                                  End Sub))
     End Sub
 
     Private Sub OnNetWorkChanged_Event(ByVal sender As Object, ByVal e As NetworkInformation.NetworkAvailabilityEventArgs) ' Handles Me.NetChangedHandler
-        loadnic()
+        Invoke(New MethodInvoker(Sub()
+
+                                     loadnic()
+
+                                 End Sub))
     End Sub
 
     Sub posiziona()
@@ -304,8 +312,18 @@ ByVal dwReserved As Int32) As Boolean
             My.Settings.Save()
         End If
     End Sub
-    Private Sub loadnic()
 
+    Dim menu2 As New ToolStripMenuItem
+
+
+    Private Sub loadnic()
+        Try
+            SelezioneNetworkToolStripMenuItem.DropDownItems.Clear()
+            RemoveHandler menu2.Click, AddressOf mnuItem_Clicked
+
+        Catch ex As Exception
+
+        End Try
         Try
             Dim Adapters As NetworkInterface() = NetworkInterface.GetAllNetworkInterfaces()
             Dim ce As Boolean = False
@@ -317,13 +335,16 @@ ByVal dwReserved As Int32) As Boolean
                         Dim ip = network.GetIPProperties().UnicastAddresses(1).Address.ToString
 
                         conta = conta + 1
-                        Dim menu2 As New ToolStripMenuItem() With {.Text = network.Description, .Name = CStr(conta), .Tag = network}
+                        menu2 = New ToolStripMenuItem With {.Text = network.Description, .Name = CStr(conta), .Tag = network}
                         'We have a reference to menu1 already, but here's how you can find the menu item by name...
                         Try
                             For Each item As ToolStripMenuItem In ContextMenuStrip1.Items
                                 If item.Name = "SelezioneNetworkToolStripMenuItem" Then
-                                    item.DropDownItems.Add(menu2)
-                                    AddHandler menu2.Click, AddressOf mnuItem_Clicked
+                                    If item.DropDownItems.Contains(menu2) = False Then
+                                        item.DropDownItems.Add(menu2)
+                                        AddHandler menu2.Click, AddressOf mnuItem_Clicked
+                                    End If
+
                                     If ce = False Then
                                         net = network
                                         ce = True
@@ -346,6 +367,7 @@ ByVal dwReserved As Int32) As Boolean
                 For Each item As ToolStripMenuItem In SelezioneNetworkToolStripMenuItem.DropDownItems
                     If My.Settings.nic <> "" And My.Settings.nic.ToString.ToLower.Trim = item.Text.ToString.ToLower.Trim Then
                         esiste = True
+                        Exit For
                     Else
                         My.Settings.nic = ""
                     End If
