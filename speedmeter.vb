@@ -201,9 +201,6 @@ Public Class speedmeter
     Dim ritorna As Boolean = False
     Private Sub Timer2_Tick(sender As Object, e As EventArgs) Handles Timer2.Tick
 
-        If ritorna Then
-            Return
-        End If
 
 
         '''autonic()
@@ -258,8 +255,8 @@ Public Class speedmeter
         Return ret.ToString
     End Function
 
-    Dim LastUpload As Long
-    Dim LastDownload As Long
+    Dim LastUpload As Long = -1
+    Dim LastDownload As Long = -1
 
     Public Function CheckNet() As Boolean
         Dim num As Integer
@@ -402,6 +399,14 @@ ByVal dwReserved As Int32) As Boolean
         Try
 
             Dim NicStats As IPv4InterfaceStatistics = net.GetIPv4Statistics
+            If LastUpload = -1 Then
+                LastUpload = NicStats.BytesSent
+            End If
+
+            If LastDownload = -1 Then
+                LastDownload = NicStats.BytesReceived
+            End If
+
 
             Dim Up = NicStats.BytesSent - LastUpload
             Dim Down = NicStats.BytesReceived - LastDownload
