@@ -9,4 +9,3 @@ D:\speed-meter\speed-meter\obj\Debug\speed-meter.vbproj.CoreCompileInputs.cache
 D:\speed-meter\speed-meter\obj\Debug\speed-meter.exe
 D:\speed-meter\speed-meter\obj\Debug\speed-meter.xml
 D:\speed-meter\speed-meter\obj\Debug\speed-meter.pdb
-D:\speed-meter\speed-meter\obj\Debug\speed-meter.vbproj.AssemblyReference.cache

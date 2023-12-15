@@ -213,31 +213,17 @@ Public Class speedmeter
 
     ' Left mouse button pressed
     Private Sub Form1_MouseDown(sender As Object, e As MouseEventArgs) Handles MyBase.MouseDown
-        If e.Button = MouseButtons.Left Then
-            ' Get the new position
-            mouseOffset = New Point(-e.X, -e.Y)
-            ' Set that left button is pressed
-            isMouseDown = True
-        End If
+
     End Sub
 
     ' MouseMove used to check if mouse cursor is moving
     Private Sub Form1_MouseMove(sender As Object, e As MouseEventArgs) Handles MyBase.MouseMove
-        If isMouseDown Then
-            Dim mousePos As Point = Control.MousePosition
-            ' Get the new form position
-            mousePos.Offset(mouseOffset.X, mouseOffset.Y)
-            Me.Left = mousePos.X
-        End If
+
     End Sub
 
     ' Left mouse button released, form should stop moving
     Private Sub Form1_MouseUp(sender As Object, e As MouseEventArgs) Handles MyBase.MouseUp
-        If e.Button = MouseButtons.Left Then
-            isMouseDown = False
-            My.Settings.posizione = Me.Left
-            My.Settings.Save()
-        End If
+
     End Sub
 
 
@@ -335,7 +321,7 @@ ByVal dwReserved As Int32) As Boolean
                         menu2 = New ToolStripMenuItem With {.Text = network.Description, .Name = CStr(conta), .Tag = network}
                         'We have a reference to menu1 already, but here's how you can find the menu item by name...
                         Try
-                            For Each item As ToolStripMenuItem In ContextMenuStrip1.Items
+                            For Each item As Object In ContextMenuStrip1.Items
                                 If item.Name = "SelezioneNetworkToolStripMenuItem" Then
                                     If item.DropDownItems.Contains(menu2) = False Then
                                         item.DropDownItems.Add(menu2)
@@ -425,6 +411,11 @@ ByVal dwReserved As Int32) As Boolean
                     Me.Width = Label2.Width + Label4.Width + 5
                 End If
 
+                PictureBox1.Top = 10
+                PictureBox1.Left = Label1.Left
+                PictureBox1.Width = Label1.Width / 2
+                PictureBox1.Height = Me.Height - 20
+
 
             Catch ex As Exception
 
@@ -440,60 +431,6 @@ ByVal dwReserved As Int32) As Boolean
 
     Private Sub Label1_Click(sender As Object, e As EventArgs) Handles Label1.Click
 
-    End Sub
-
-    Private Sub Label1_MouseDown(sender As Object, e As MouseEventArgs) Handles Label1.MouseDown
-        If e.Button = MouseButtons.Left Then
-            ' Get the new position
-            mouseOffset = New Point(-e.X, -e.Y)
-            ' Set that left button is pressed
-            isMouseDown = True
-        Else
-            ContextMenuStrip1.Show()
-        End If
-    End Sub
-
-    Private Sub Label2_MouseDown(sender As Object, e As MouseEventArgs) Handles Label2.MouseDown
-        If e.Button = MouseButtons.Left Then
-            ' Get the new position
-            mouseOffset = New Point(-e.X, -e.Y)
-            ' Set that left button is pressed
-            isMouseDown = True
-        Else
-            ContextMenuStrip1.Show()
-        End If
-    End Sub
-
-    Private Sub Label1_MouseUp(sender As Object, e As MouseEventArgs) Handles Label1.MouseUp
-        If e.Button = MouseButtons.Left Then
-            isMouseDown = False
-            My.Settings.posizione = Me.Left
-            My.Settings.Save()
-        End If
-    End Sub
-    Private Sub Label2_MouseUp(sender As Object, e As MouseEventArgs) Handles Label2.MouseUp
-        If e.Button = MouseButtons.Left Then
-            isMouseDown = False
-            My.Settings.posizione = Me.Left
-            My.Settings.Save()
-        End If
-    End Sub
-
-    Private Sub Label1_MouseMove(sender As Object, e As MouseEventArgs) Handles Label1.MouseMove
-        If isMouseDown Then
-            Dim mousePos As Point = Control.MousePosition
-            ' Get the new form position
-            mousePos.Offset(mouseOffset.X, mouseOffset.Y)
-            Me.Left = mousePos.X
-        End If
-    End Sub
-    Private Sub Label2_MouseMove(sender As Object, e As MouseEventArgs) Handles Label2.MouseMove
-        If isMouseDown Then
-            Dim mousePos As Point = Control.MousePosition
-            ' Get the new form position
-            mousePos.Offset(mouseOffset.X, mouseOffset.Y)
-            Me.Left = mousePos.X
-        End If
     End Sub
 
     Private Sub SelezionaCororeTestoToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SelezionaCororeTestoToolStripMenuItem.Click
@@ -551,7 +488,45 @@ ByVal dwReserved As Int32) As Boolean
         ritorna = False
     End Sub
 
+    Private Sub SpostamiToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SpostamiToolStripMenuItem.Click
+        Me.PictureBox1.Visible = Not Me.PictureBox1.Visible
+        SpostamiToolStripMenuItem.Checked = Me.PictureBox1.Visible
+        If SpostamiToolStripMenuItem.Checked Then
+            SpostamiToolStripMenuItem.Text = "FINE Spostami"
+        Else
+            SpostamiToolStripMenuItem.Text = "Spostami"
+        End If
+    End Sub
 
+    Private Sub PictureBox1_Click(sender As Object, e As EventArgs) Handles PictureBox1.Click
+
+    End Sub
+
+    Private Sub PictureBox1_MouseDown(sender As Object, e As MouseEventArgs) Handles PictureBox1.MouseDown
+        If e.Button = MouseButtons.Left Then
+            ' Get the new position
+            mouseOffset = New Point(-e.X, -e.Y)
+            ' Set that left button is pressed
+            isMouseDown = True
+        End If
+    End Sub
+
+    Private Sub PictureBox1_MouseMove(sender As Object, e As MouseEventArgs) Handles PictureBox1.MouseMove
+        If isMouseDown Then
+            Dim mousePos As Point = Control.MousePosition
+            ' Get the new form position
+            mousePos.Offset(mouseOffset.X, mouseOffset.Y)
+            Me.Left = mousePos.X
+        End If
+    End Sub
+
+    Private Sub PictureBox1_MouseUp(sender As Object, e As MouseEventArgs) Handles PictureBox1.MouseUp
+        If e.Button = MouseButtons.Left Then
+            isMouseDown = False
+            My.Settings.posizione = Me.Left
+            My.Settings.Save()
+        End If
+    End Sub
 End Class
 
 
