@@ -109,8 +109,6 @@ Public Class speedmeter
 
 
 
-
-
         IsAdministrator = New WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator)
         If IsAdministrator Then
             CreateShortCut()
@@ -146,6 +144,25 @@ Public Class speedmeter
         Else
             cambiasu()
         End If
+        If My.Settings.banda <> "" Then
+            bandwidth = My.Settings.banda
+        Else
+            bandwidth = "Mb"
+        End If
+
+
+        Try
+            For Each i As ToolStripMenuItem In SelezionaBandWidthToolStripMenuItem.DropDownItems
+                i.Checked = False
+                If i.Text = bandwidth Then
+                    i.Checked = True
+                End If
+            Next
+        Catch ex As Exception
+
+        End Try
+
+
 
         AddHandler NetworkChange.NetworkAvailabilityChanged, AddressOf OnNetWorkChanged_Event
         AddHandler NetworkChange.NetworkAddressChanged, AddressOf OnNetworkAddrChanged_Event
@@ -270,12 +287,25 @@ Public Class speedmeter
     Public net As NetworkInterface
 
     Public Function BytesConverter(ByVal bytes As Long) As String
-        Dim KB As Long = 1024
-        Dim MB As Long = KB * KB
-        Dim GB As Long = KB * KB * KB
-        Dim TB As Long = KB * KB * KB * KB
+        Dim divisore As Integer = 1
+        Dim banda As Double = bytes / 1024 / 1024
+        Select Case bandwidth.Trim
+            Case "Gb", "Mb", "Kb"
+                divisore = 8
+        End Select
+
+        Select Case bandwidth.ToLower.Trim
+            Case "gb"
+                banda = bytes / 1024 / 1024 / 1024
+            Case "mb"
+                banda = bytes / 1024 / 1024
+            Case "kb"
+                banda = bytes / 1024
+        End Select
+
+
         Dim ret As String = "0 Mb"
-        ret = (bytes / 1024 / 1024 * 8).ToString("000.00") & " Mb"
+        ret = (banda * divisore).ToString("000.00") & " " & bandwidth.Trim
 
 
         Return ret.ToString
@@ -639,6 +669,96 @@ ByVal dwReserved As Int32) As Boolean
             cambiasu()
         End If
         ritorna = False
+    End Sub
+    Dim bandwidth As String = "Mb"
+    Private Sub GBToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles GBToolStripMenuItem.Click
+        bandwidth = "GB"
+        Try
+            For Each i As ToolStripMenuItem In SelezionaBandWidthToolStripMenuItem.DropDownItems
+                i.Checked = False
+            Next
+        Catch ex As Exception
+
+        End Try
+        GBToolStripMenuItem.Checked = True
+        My.Settings.banda = bandwidth
+        My.Settings.Save()
+    End Sub
+
+    Private Sub GbToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles GbToolStripMenuItem1.Click
+        bandwidth = "Gb"
+        Try
+            For Each i As ToolStripMenuItem In SelezionaBandWidthToolStripMenuItem.DropDownItems
+                i.Checked = False
+            Next
+        Catch ex As Exception
+
+        End Try
+        GbToolStripMenuItem1.Checked = True
+        My.Settings.banda = bandwidth
+        My.Settings.Save()
+    End Sub
+
+
+    Private Sub MBToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MBToolStripMenuItem.Click
+        bandwidth = "MB"
+        Try
+            For Each i As ToolStripMenuItem In SelezionaBandWidthToolStripMenuItem.DropDownItems
+                i.Checked = False
+            Next
+        Catch ex As Exception
+
+        End Try
+        MBToolStripMenuItem.Checked = True
+        My.Settings.banda = bandwidth
+        My.Settings.Save()
+    End Sub
+
+    Private Sub MbToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles MbToolStripMenuItem1.Click
+        bandwidth = "Mb"
+        Try
+            For Each i As ToolStripMenuItem In SelezionaBandWidthToolStripMenuItem.DropDownItems
+                i.Checked = False
+            Next
+        Catch ex As Exception
+
+        End Try
+        MbToolStripMenuItem1.Checked = True
+        My.Settings.banda = bandwidth
+        My.Settings.Save()
+
+    End Sub
+
+    Private Sub KBToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles KBToolStripMenuItem.Click
+        bandwidth = "KB"
+        Try
+            For Each i As ToolStripMenuItem In SelezionaBandWidthToolStripMenuItem.DropDownItems
+                i.Checked = False
+            Next
+        Catch ex As Exception
+
+        End Try
+        KBToolStripMenuItem.Checked = True
+        My.Settings.banda = bandwidth
+        My.Settings.Save()
+    End Sub
+
+    Private Sub KbToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles KbToolStripMenuItem1.Click
+        bandwidth = "Kb"
+        Try
+            For Each i As ToolStripMenuItem In SelezionaBandWidthToolStripMenuItem.DropDownItems
+                i.Checked = False
+            Next
+        Catch ex As Exception
+
+        End Try
+        KbToolStripMenuItem1.Checked = True
+        My.Settings.banda = bandwidth
+        My.Settings.Save()
+    End Sub
+
+    Private Sub ContextMenuStrip1_Opening(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles ContextMenuStrip1.Opening
+
     End Sub
 End Class
 

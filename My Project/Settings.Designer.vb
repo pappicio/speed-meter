@@ -121,6 +121,18 @@ Namespace My
                 Me("nic") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("Mb")>  _
+        Public Property banda() As String
+            Get
+                Return CType(Me("banda"),String)
+            End Get
+            Set
+                Me("banda") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

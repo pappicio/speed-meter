@@ -20,5 +20,8 @@
     <Setting Name="nic" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="banda" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Mb</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
