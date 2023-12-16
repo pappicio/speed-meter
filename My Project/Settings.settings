@@ -23,5 +23,8 @@
     <Setting Name="banda" Type="System.String" Scope="User">
       <Value Profile="(Default)">Mb</Value>
     </Setting>
+    <Setting Name="duepunti" Type="System.String" Scope="User">
+      <Value Profile="(Default)">no</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -160,7 +160,13 @@ Public Class speedmeter
         Else
             bandwidth = "Mb"
         End If
-
+        If My.Settings.duepunti.ToLower.Trim = "si" Then
+            duepunti = True
+            VisualizzaIToolStripMenuItem.Checked = True
+        Else
+            duepunti = False
+            VisualizzaIToolStripMenuItem.Checked = False
+        End If
 
         Try
             For Each i As ToolStripMenuItem In SelezionaBandWidthToolStripMenuItem.DropDownItems
@@ -217,8 +223,6 @@ Public Class speedmeter
                         duepunti = False
                     End If
 
-
-                    labelcolor = Label1.ForeColor
                 Catch ex As Exception
 
                 End Try
@@ -1003,6 +1007,23 @@ ByVal dwReserved As Int32) As Boolean
 
     Private Sub ContextMenuStrip1_Opening(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles ContextMenuStrip1.Opening
 
+    End Sub
+
+    Private Sub VisualizzaIToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles VisualizzaIToolStripMenuItem.Click
+        If VisualizzaIToolStripMenuItem.Checked Then
+            VisualizzaIToolStripMenuItem.Checked = False
+            duepunti = False
+        Else
+            VisualizzaIToolStripMenuItem.Checked = True
+            duepunti = True
+        End If
+        If duepunti Then
+            My.Settings.duepunti = "si"
+        Else
+            My.Settings.duepunti = "no"
+        End If
+        My.Settings.Save()
+        salvaconfig("duepunti", My.Settings.duepunti)
     End Sub
 End Class
 

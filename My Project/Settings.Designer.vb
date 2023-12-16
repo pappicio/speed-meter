@@ -133,6 +133,18 @@ Namespace My
                 Me("banda") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("no")>  _
+        Public Property duepunti() As String
+            Get
+                Return CType(Me("duepunti"),String)
+            End Get
+            Set
+                Me("duepunti") = value
+            End Set
+        End Property
     End Class
 End Namespace
 
