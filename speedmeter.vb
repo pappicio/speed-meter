@@ -455,7 +455,7 @@ ByVal dwReserved As Int32) As Boolean
                 PictureBox3.Top = Label2.Top
                 PictureBox3.Left = 0
                 PictureBox3.Height = Label2.Height
-                PictureBox3.Width = PictureBox3.Height / 4 * 3
+                PictureBox3.Width = PictureBox3.Height / 8 * 7
 
                 PictureBox2.Top = Label1.Top
                 PictureBox2.Left = 0
@@ -519,7 +519,7 @@ ByVal dwReserved As Int32) As Boolean
 
     End Sub
 
-    Private Sub SelezionaColoreUploadToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SelezionaColoreUploadToolStripMenuItem.Click
+    Private Sub SelezionaColoreUploadToolStripMenuItem_Click(sender As Object, e As EventArgs)
         Me.ColorDialog1.Color = My.Settings.coloreup
         ritorna = True
         If ColorDialog1.ShowDialog <> Windows.Forms.DialogResult.Cancel Then
@@ -587,11 +587,11 @@ ByVal dwReserved As Int32) As Boolean
 
     End Sub
 
-    Private Sub ContextMenuStrip3_Opening(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles ContextMenuStrip3.Opening
+    Private Sub ContextMenuStrip3_Opening(sender As Object, e As System.ComponentModel.CancelEventArgs)
 
     End Sub
 
-    Private Sub SeleionaColoreUploadToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SeleionaColoreUploadToolStripMenuItem.Click
+    Private Sub SeleionaColoreUploadToolStripMenuItem_Click(sender As Object, e As EventArgs)
         Me.ColorDialog1.Color = My.Settings.coloredown
         ritorna = True
         If ColorDialog1.ShowDialog <> Windows.Forms.DialogResult.Cancel Then
@@ -603,7 +603,7 @@ ByVal dwReserved As Int32) As Boolean
         ritorna = False
     End Sub
 
-    Private Sub SelezionaColoreTestoToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SelezionaColoreTestoToolStripMenuItem.Click
+    Private Sub SelezionaColoreTestoToolStripMenuItem_Click(sender As Object, e As EventArgs)
         Me.ColorDialog1.Color = Label1.ForeColor
         ritorna = True
         If ColorDialog1.ShowDialog <> Windows.Forms.DialogResult.Cancel Then
@@ -613,6 +613,30 @@ ByVal dwReserved As Int32) As Boolean
             My.Settings.colore = ColorDialog1.Color
             My.Settings.Save()
 
+        End If
+        ritorna = False
+    End Sub
+
+    Private Sub SelezioneColoreDownloadToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SelezioneColoreDownloadToolStripMenuItem.Click
+        Me.ColorDialog1.Color = My.Settings.coloredown
+        ritorna = True
+        If ColorDialog1.ShowDialog <> Windows.Forms.DialogResult.Cancel Then
+
+            My.Settings.coloredown = ColorDialog1.Color
+            My.Settings.Save()
+            cambiagiu()
+        End If
+        ritorna = False
+    End Sub
+
+    Private Sub SelezionaColoreUploadToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles SelezionaColoreUploadToolStripMenuItem1.Click
+        Me.ColorDialog1.Color = My.Settings.coloreup
+        ritorna = True
+        If ColorDialog1.ShowDialog <> Windows.Forms.DialogResult.Cancel Then
+
+            My.Settings.coloreup = ColorDialog1.Color
+            My.Settings.Save()
+            cambiasu()
         End If
         ritorna = False
     End Sub

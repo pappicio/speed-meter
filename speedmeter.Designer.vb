@@ -36,17 +36,13 @@ Partial Class speedmeter
         Me.Timer2 = New System.Windows.Forms.Timer(Me.components)
         Me.FontDialog1 = New System.Windows.Forms.FontDialog()
         Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
-        Me.ContextMenuStrip3 = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.SelezionaColoreUploadToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.PictureBox3 = New System.Windows.Forms.PictureBox()
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
-        Me.SeleionaColoreUploadToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
-        Me.SelezionaColoreTestoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
+        Me.SelezioneColoreDownloadToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SelezionaColoreUploadToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.ContextMenuStrip1.SuspendLayout()
-        Me.ContextMenuStrip3.SuspendLayout()
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -56,7 +52,7 @@ Partial Class speedmeter
         '
         Me.Label1.AutoSize = True
         Me.Label1.ContextMenuStrip = Me.ContextMenuStrip1
-        Me.Label1.Location = New System.Drawing.Point(43, 9)
+        Me.Label1.Location = New System.Drawing.Point(32, 7)
         Me.Label1.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(68, 22)
@@ -66,49 +62,49 @@ Partial Class speedmeter
         'ContextMenuStrip1
         '
         Me.ContextMenuStrip1.ImageScalingSize = New System.Drawing.Size(20, 20)
-        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SpostamiToolStripMenuItem, Me.ToolStripSeparator2, Me.SelezioneNetworkToolStripMenuItem, Me.ToolStripSeparator1, Me.SeelzionaFontTestoToolStripMenuItem, Me.SelezionaCororeTestoToolStripMenuItem})
+        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SpostamiToolStripMenuItem, Me.ToolStripSeparator2, Me.SelezioneNetworkToolStripMenuItem, Me.ToolStripSeparator1, Me.SeelzionaFontTestoToolStripMenuItem, Me.SelezionaCororeTestoToolStripMenuItem, Me.ToolStripSeparator5, Me.SelezioneColoreDownloadToolStripMenuItem, Me.SelezionaColoreUploadToolStripMenuItem1})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(224, 112)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(264, 166)
         '
         'SpostamiToolStripMenuItem
         '
         Me.SpostamiToolStripMenuItem.Name = "SpostamiToolStripMenuItem"
-        Me.SpostamiToolStripMenuItem.Size = New System.Drawing.Size(223, 24)
+        Me.SpostamiToolStripMenuItem.Size = New System.Drawing.Size(261, 24)
         Me.SpostamiToolStripMenuItem.Text = "Spostami"
         '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(220, 6)
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(258, 6)
         '
         'SelezioneNetworkToolStripMenuItem
         '
         Me.SelezioneNetworkToolStripMenuItem.Name = "SelezioneNetworkToolStripMenuItem"
-        Me.SelezioneNetworkToolStripMenuItem.Size = New System.Drawing.Size(223, 24)
+        Me.SelezioneNetworkToolStripMenuItem.Size = New System.Drawing.Size(261, 24)
         Me.SelezioneNetworkToolStripMenuItem.Text = "Seleziona Network"
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(220, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(258, 6)
         '
         'SeelzionaFontTestoToolStripMenuItem
         '
         Me.SeelzionaFontTestoToolStripMenuItem.Name = "SeelzionaFontTestoToolStripMenuItem"
-        Me.SeelzionaFontTestoToolStripMenuItem.Size = New System.Drawing.Size(223, 24)
+        Me.SeelzionaFontTestoToolStripMenuItem.Size = New System.Drawing.Size(261, 24)
         Me.SeelzionaFontTestoToolStripMenuItem.Text = "seleziona font testo"
         '
         'SelezionaCororeTestoToolStripMenuItem
         '
         Me.SelezionaCororeTestoToolStripMenuItem.Name = "SelezionaCororeTestoToolStripMenuItem"
-        Me.SelezionaCororeTestoToolStripMenuItem.Size = New System.Drawing.Size(223, 24)
+        Me.SelezionaCororeTestoToolStripMenuItem.Size = New System.Drawing.Size(261, 24)
         Me.SelezionaCororeTestoToolStripMenuItem.Text = "seleziona colore testo"
         '
         'Label2
         '
         Me.Label2.AutoSize = True
         Me.Label2.ContextMenuStrip = Me.ContextMenuStrip1
-        Me.Label2.Location = New System.Drawing.Point(42, 26)
+        Me.Label2.Location = New System.Drawing.Point(30, 26)
         Me.Label2.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(68, 22)
@@ -124,25 +120,12 @@ Partial Class speedmeter
         Me.Timer2.Enabled = True
         Me.Timer2.Interval = 1000
         '
-        'ContextMenuStrip3
-        '
-        Me.ContextMenuStrip3.ImageScalingSize = New System.Drawing.Size(20, 20)
-        Me.ContextMenuStrip3.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SeleionaColoreUploadToolStripMenuItem, Me.ToolStripSeparator3, Me.SelezionaColoreUploadToolStripMenuItem, Me.ToolStripSeparator4, Me.SelezionaColoreTestoToolStripMenuItem})
-        Me.ContextMenuStrip3.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip3.Size = New System.Drawing.Size(255, 116)
-        '
-        'SelezionaColoreUploadToolStripMenuItem
-        '
-        Me.SelezionaColoreUploadToolStripMenuItem.Name = "SelezionaColoreUploadToolStripMenuItem"
-        Me.SelezionaColoreUploadToolStripMenuItem.Size = New System.Drawing.Size(241, 24)
-        Me.SelezionaColoreUploadToolStripMenuItem.Text = "Seleziona colore Upload"
-        '
         'PictureBox3
         '
         Me.PictureBox3.BackColor = System.Drawing.Color.Transparent
-        Me.PictureBox3.ContextMenuStrip = Me.ContextMenuStrip3
+        Me.PictureBox3.ContextMenuStrip = Me.ContextMenuStrip1
         Me.PictureBox3.Image = Global.speed_meter.My.Resources.Resources.su
-        Me.PictureBox3.Location = New System.Drawing.Point(14, 26)
+        Me.PictureBox3.Location = New System.Drawing.Point(0, 28)
         Me.PictureBox3.Name = "PictureBox3"
         Me.PictureBox3.Size = New System.Drawing.Size(25, 33)
         Me.PictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
@@ -152,9 +135,9 @@ Partial Class speedmeter
         'PictureBox2
         '
         Me.PictureBox2.BackColor = System.Drawing.Color.Transparent
-        Me.PictureBox2.ContextMenuStrip = Me.ContextMenuStrip3
+        Me.PictureBox2.ContextMenuStrip = Me.ContextMenuStrip1
         Me.PictureBox2.Image = Global.speed_meter.My.Resources.Resources.giu
-        Me.PictureBox2.Location = New System.Drawing.Point(19, 2)
+        Me.PictureBox2.Location = New System.Drawing.Point(2, -2)
         Me.PictureBox2.Name = "PictureBox2"
         Me.PictureBox2.Size = New System.Drawing.Size(25, 29)
         Me.PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
@@ -166,7 +149,7 @@ Partial Class speedmeter
         Me.PictureBox1.BackColor = System.Drawing.Color.Transparent
         Me.PictureBox1.ContextMenuStrip = Me.ContextMenuStrip1
         Me.PictureBox1.Image = Global.speed_meter.My.Resources.Resources.download
-        Me.PictureBox1.Location = New System.Drawing.Point(115, 9)
+        Me.PictureBox1.Location = New System.Drawing.Point(104, 5)
         Me.PictureBox1.Name = "PictureBox1"
         Me.PictureBox1.Size = New System.Drawing.Size(32, 46)
         Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
@@ -174,27 +157,22 @@ Partial Class speedmeter
         Me.PictureBox1.TabStop = False
         Me.PictureBox1.Visible = False
         '
-        'SeleionaColoreUploadToolStripMenuItem
+        'SelezioneColoreDownloadToolStripMenuItem
         '
-        Me.SeleionaColoreUploadToolStripMenuItem.Name = "SeleionaColoreUploadToolStripMenuItem"
-        Me.SeleionaColoreUploadToolStripMenuItem.Size = New System.Drawing.Size(254, 24)
-        Me.SeleionaColoreUploadToolStripMenuItem.Text = "Seleiona colore Download"
+        Me.SelezioneColoreDownloadToolStripMenuItem.Name = "SelezioneColoreDownloadToolStripMenuItem"
+        Me.SelezioneColoreDownloadToolStripMenuItem.Size = New System.Drawing.Size(263, 24)
+        Me.SelezioneColoreDownloadToolStripMenuItem.Text = "Selezione Colore Download"
         '
-        'ToolStripSeparator3
+        'SelezionaColoreUploadToolStripMenuItem1
         '
-        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(251, 6)
+        Me.SelezionaColoreUploadToolStripMenuItem1.Name = "SelezionaColoreUploadToolStripMenuItem1"
+        Me.SelezionaColoreUploadToolStripMenuItem1.Size = New System.Drawing.Size(263, 24)
+        Me.SelezionaColoreUploadToolStripMenuItem1.Text = "Seleziona Colore Upload"
         '
-        'SelezionaColoreTestoToolStripMenuItem
+        'ToolStripSeparator5
         '
-        Me.SelezionaColoreTestoToolStripMenuItem.Name = "SelezionaColoreTestoToolStripMenuItem"
-        Me.SelezionaColoreTestoToolStripMenuItem.Size = New System.Drawing.Size(254, 24)
-        Me.SelezionaColoreTestoToolStripMenuItem.Text = "Seleziona Colore testo"
-        '
-        'ToolStripSeparator4
-        '
-        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
-        Me.ToolStripSeparator4.Size = New System.Drawing.Size(251, 6)
+        Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
+        Me.ToolStripSeparator5.Size = New System.Drawing.Size(260, 6)
         '
         'speedmeter
         '
@@ -217,7 +195,6 @@ Partial Class speedmeter
         Me.TopMost = True
         Me.TransparencyKey = System.Drawing.Color.Silver
         Me.ContextMenuStrip1.ResumeLayout(False)
-        Me.ContextMenuStrip3.ResumeLayout(False)
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
@@ -235,8 +212,6 @@ Partial Class speedmeter
     Friend WithEvents Timer2 As Timer
     Friend WithEvents FontDialog1 As FontDialog
     Friend WithEvents ColorDialog1 As ColorDialog
-    Friend WithEvents ContextMenuStrip3 As ContextMenuStrip
-    Friend WithEvents SelezionaColoreUploadToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents SelezioneNetworkToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
     Friend WithEvents PictureBox1 As PictureBox
@@ -244,8 +219,7 @@ Partial Class speedmeter
     Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
     Friend WithEvents PictureBox2 As PictureBox
     Friend WithEvents PictureBox3 As PictureBox
-    Friend WithEvents SeleionaColoreUploadToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
-    Friend WithEvents ToolStripSeparator4 As ToolStripSeparator
-    Friend WithEvents SelezionaColoreTestoToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents SelezioneColoreDownloadToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents SelezionaColoreUploadToolStripMenuItem1 As ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator5 As ToolStripSeparator
 End Class
