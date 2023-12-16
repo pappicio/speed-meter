@@ -59,7 +59,7 @@ Public Class speedmeter
     End Function
     Dim TaskBarRect As Rectangle()
 
-
+    Dim coloredown As Color = Nothing
     Sub cambiagiu()
         Dim x As Integer
         Dim y As Integer
@@ -73,7 +73,12 @@ Public Class speedmeter
                 a = img.GetPixel(x, y).A
 
                 If a > 250 Then
-                    img.SetPixel(x, y, My.Settings.coloredown)
+                    If coloredown <> Nothing Then
+                        img.SetPixel(x, y, coloredown)
+                    Else
+                        img.SetPixel(x, y, My.Settings.coloredown)
+                    End If
+
                 End If
 
             Next
@@ -82,6 +87,7 @@ Public Class speedmeter
         PictureBox2.Image = img
     End Sub
 
+    Dim coloreup As Color = Nothing
     Sub cambiasu()
         Dim x As Integer
         Dim y As Integer
@@ -96,7 +102,12 @@ Public Class speedmeter
                 a = img.GetPixel(x, y).A
 
                 If a > 250 Then
-                    img.SetPixel(x, y, My.Settings.coloreup)
+                    If coloreup <> Nothing Then
+                        img.SetPixel(x, y, coloreup)
+                    Else
+                        img.SetPixel(x, y, My.Settings.coloreup)
+                    End If
+
                 End If
 
             Next
@@ -169,11 +180,179 @@ Public Class speedmeter
         Invoke(New MethodInvoker(Sub()
 
                                      loadnic()
-
                                  End Sub))
+
+        If IO.File.Exists(Application.StartupPath & "\speed-meter.cfg") Then
+            caricaconfig
+        End If
         posiziona()
         Timer2_Tick(Nothing, Nothing)
     End Sub
+
+    Dim fontx As Font
+    Dim labelcolor As Color
+    Dim posizione As Integer = -1
+    Dim duepunti As Boolean = True
+    Sub caricaconfig()
+
+
+        fontx = New Font("Microsoft Sans Serif", 12, FontStyle.Regular)
+
+        Dim streamReader As System.IO.StreamReader = New System.IO.StreamReader(String.Concat(Application.StartupPath, "\speed-meter.cfg"))
+        While streamReader.Peek() <> -1
+            Dim str As String = streamReader.ReadLine().Trim()
+            If (str.StartsWith("'")) Then
+                Continue While
+            End If
+
+            '[duepunti]=no
+
+            If str.StartsWith("[duepunti]") Then
+                Try
+                    str = Strings.Mid(str, str.LastIndexOf("=") + 2, str.Length).Trim
+
+                    If str.ToLower.Trim.StartsWith("s") Then
+                        duepunti = True
+                    Else
+                        duepunti = False
+                    End If
+
+
+                    labelcolor = Label1.ForeColor
+                Catch ex As Exception
+
+                End Try
+            End If
+
+            If str.StartsWith("[labelcolor]") Then
+                Try
+                    str = Strings.Mid(str, str.LastIndexOf("=") + 2, str.Length).Trim
+
+                    If IsNumeric(Val("&H" & str)) Then
+                        Label1.ForeColor = Color.FromArgb(str)
+                        Label2.ForeColor = Color.FromArgb(str)
+                    Else
+                        Label1.ForeColor = Color.FromName(str)
+                        Label2.ForeColor = Color.FromName(str)
+                    End If
+
+
+                    labelcolor = Label1.ForeColor
+                Catch ex As Exception
+
+                End Try
+            End If
+
+
+
+            If str.StartsWith("[downcolor]") Then
+                Try
+                    str = Strings.Mid(str, str.LastIndexOf("=") + 2, str.Length).Trim
+                    If IsNumeric(Val("&H" & str)) Then
+                        coloredown = Color.FromArgb(str)
+                    Else
+                        coloredown = Color.FromName(str)
+                    End If
+
+                    cambiagiu()
+                Catch ex As Exception
+
+                End Try
+            End If
+
+
+            If str.StartsWith("[upcolor]") Then
+                Try
+                    str = Strings.Mid(str, str.LastIndexOf("=") + 2, str.Length).Trim
+                    If IsNumeric(Val("&H" & str)) Then
+                        coloreup = Color.FromArgb(str)
+                    Else
+                        coloreup = Color.FromName(str)
+                    End If
+
+                    cambiasu()
+                Catch ex As Exception
+
+                End Try
+            End If
+
+
+            If str.StartsWith("[posizione]") Then
+                Try
+                    posizione = Convert.ToInt32(Strings.Mid(str, str.LastIndexOf("=") + 2, str.Length).Trim)
+                Catch ex As Exception
+                    Dim TmpScrn As Screen = Screen.FromControl(Me)
+                    posizione = TmpScrn.Bounds.Width - Me.Width - 300
+                End Try
+            End If
+
+
+
+
+
+            If str.StartsWith("[font]") Then
+                Dim fontf As String = ""
+                Dim font2() As String
+                Try
+
+                    fontf = (Strings.Mid(str, str.LastIndexOf("=") + 2, str.Length).Trim.ToLower)
+                    If fontf.Contains(",") Then
+                        font2 = Split(fontf, ",")
+                        If font2.Length = 4 Then
+                            fontx = CreateFont(font2(0), CInt(font2(1)), font2(2), font2(3))
+                        ElseIf font2.Length = 3 Then
+                            fontx = CreateFont(font2(0), CInt(font2(1)), font2(2))
+                        ElseIf font2.Length = 2 Then
+                            fontx = CreateFont(font2(0), CInt(font2(1)))
+                        End If
+
+                    Else
+                        fontx = CreateFont(fontf)
+                    End If
+                Catch ex As Exception
+
+                End Try
+
+                Me.Font = fontx
+                Label1.Font = fontx
+                Label2.Font = fontx
+            End If
+
+        End While
+
+        streamReader.Close()
+        streamReader.Dispose()
+
+
+        lastedit = IO.File.GetLastWriteTime(Application.StartupPath & "\speed-meter.cfg")
+
+    End Sub
+    Public Function CreateFont(Optional fontName As String = "Microsoft Sans Serif", Optional fontSize As Integer = 12, Optional tipo As String = "", Optional tipo2 As String = "") As Drawing.Font
+        fontName = fontName.Trim
+        tipo = tipo.Trim
+        tipo2 = tipo2.Trim
+
+
+        Dim styles As FontStyle = FontStyle.Regular
+        tipo = tipo.ToLower.Trim
+        Select Case tipo
+            Case "bold"
+                styles = styles Or FontStyle.Bold
+            Case "italic"
+                styles = styles Or FontStyle.Italic
+        End Select
+
+        Select Case tipo2
+            Case "bold"
+                styles = styles Or FontStyle.Bold
+            Case "italic"
+                styles = styles Or FontStyle.Italic
+        End Select
+
+        Dim newFont As New Font(fontName, fontSize, styles)
+        Return newFont
+
+    End Function
 
     Private Sub OnNetworkAddrChanged_Event(ByVal sender As Object, ByVal e As EventArgs)
 
@@ -193,6 +372,11 @@ Public Class speedmeter
     End Sub
 
     Sub posiziona()
+        If posizione <> -1 Then
+            Me.Left = posizione
+        Else
+            Me.Left = My.Settings.posizione
+        End If
 
         Me.Height = TaskBarRect(0).Height - 1
         Dim mezzo As Integer = Me.Height / 2
@@ -236,10 +420,14 @@ Public Class speedmeter
 
     End Function
 
+    Dim lastedit As DateTime = Nothing
+    Dim sizeold As Rectangle = Nothing
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
         If ritorna Then
             Return
         End If
+
+
 
         TaskBarRect = FindDockedTaskBars()
 
@@ -257,6 +445,16 @@ Public Class speedmeter
     End Sub
     Dim ritorna As Boolean = False
     Private Sub Timer2_Tick(sender As Object, e As EventArgs) Handles Timer2.Tick
+
+        If IO.File.Exists(Application.StartupPath & "\speed-meter.cfg") Then
+            Dim TmpScrn As Screen = Screen.FromControl(Me)
+            Dim size As Rectangle = TmpScrn.Bounds
+            If IO.File.GetLastWriteTime(Application.StartupPath & "\speed-meter.cfg") <> lastedit Or sizeold <> size Then
+                caricaconfig()
+                sizeold = size
+                posiziona()
+            End If
+        End If
 
 
 
@@ -470,8 +668,14 @@ ByVal dwReserved As Int32) As Boolean
             LastUpload = NicStats.BytesSent
             LastDownload = NicStats.BytesReceived
             Try
-                Label1.Text = ":" & BytesConverter(If(Down < 0, 0, Down)) & "/s"
-                Label2.Text = ":" & BytesConverter(If(Up < 0, 0, Up)) & "/s"
+                If duepunti Then
+                    Label1.Text = ": " & BytesConverter(If(Down < 0, 0, Down)) & "/s"
+                    Label2.Text = ": " & BytesConverter(If(Up < 0, 0, Up)) & "/s"
+                Else
+                    Label1.Text = " " & BytesConverter(If(Down < 0, 0, Down)) & "/s"
+                    Label2.Text = " " & BytesConverter(If(Up < 0, 0, Up)) & "/s"
+                End If
+
                 Label1.Text = Label1.Text.Replace(",", ".")
                 Label2.Text = Label2.Text.Replace(",", ".")
 
@@ -526,7 +730,7 @@ ByVal dwReserved As Int32) As Boolean
             Label2.ForeColor = ColorDialog1.Color
             My.Settings.colore = ColorDialog1.Color
             My.Settings.Save()
-
+            salvaconfig("labelcolor", Label1.ForeColor.Name.ToString.ToLower)
         End If
         ritorna = False
     End Sub
@@ -541,6 +745,30 @@ ByVal dwReserved As Int32) As Boolean
             My.Settings.font = FontDialog1.Font
             My.Settings.Save()
             posiziona()
+            Dim a, b, c, d As String
+            a = Label1.Font.Name
+            b = CStr(CInt(Label1.Font.Size))
+            If Label1.Font.Bold Then
+                c = "bold"
+            Else
+                c = ""
+            End If
+            If Label1.Font.Italic Then
+                d = "italic"
+            Else
+                d = ""
+            End If
+            If c = "" Then
+                c = "regular"
+            End If
+            Dim f As String = ""
+            If d <> "" Then
+                f = a & "," & b & "," & c & "," & d
+            Else
+                f = a & "," & b & "," & c
+            End If
+            salvaconfig("font", f)
+
         End If
         ritorna = False
     End Sub
@@ -610,9 +838,23 @@ ByVal dwReserved As Int32) As Boolean
             isMouseDown = False
             My.Settings.posizione = Me.Left
             My.Settings.Save()
+            salvaconfig("posizione", posizione.ToString)
         End If
     End Sub
+    Sub salvaconfig(cosa As String, valore As String)
+        If IO.File.Exists(Application.StartupPath & "\speed-meter.cfg") Then
+            Dim linee As String() = IO.File.ReadAllLines(Application.StartupPath & "\speed-meter.cfg")
+            For x As Integer = 0 To linee.Count - 1
+                Dim s As String = linee(x).ToLower.Trim
 
+                If s.StartsWith("[" & cosa & "]") Then
+                    linee(x) = "[" & cosa & "]=" & valore.Trim
+                End If
+            Next
+
+            IO.File.WriteAllLines(Application.StartupPath & "\speed-meter.cfg", linee)
+        End If
+    End Sub
     Private Sub PictureBox3_Click(sender As Object, e As EventArgs) Handles PictureBox3.Click
 
     End Sub
@@ -655,6 +897,7 @@ ByVal dwReserved As Int32) As Boolean
             My.Settings.coloredown = ColorDialog1.Color
             My.Settings.Save()
             cambiagiu()
+            salvaconfig("downcolor", ColorDialog1.Color.Name.ToString.ToLower)
         End If
         ritorna = False
     End Sub
@@ -667,6 +910,7 @@ ByVal dwReserved As Int32) As Boolean
             My.Settings.coloreup = ColorDialog1.Color
             My.Settings.Save()
             cambiasu()
+            salvaconfig("upcolor", ColorDialog1.Color.Name.ToString.ToLower)
         End If
         ritorna = False
     End Sub
