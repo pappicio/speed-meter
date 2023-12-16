@@ -60,7 +60,50 @@ Public Class speedmeter
     Dim TaskBarRect As Rectangle()
 
 
+    Sub cambiagiu()
+        Dim x As Integer
+        Dim y As Integer
+        Dim a As Byte
 
+        Dim img As Bitmap = My.Resources.giu
+
+        For x = 0 To img.Width - 1
+            For y = 0 To img.Height - 1
+
+                a = img.GetPixel(x, y).A
+
+                If a > 250 Then
+                    img.SetPixel(x, y, My.Settings.coloredown)
+                End If
+
+            Next
+        Next
+
+        PictureBox2.Image = img
+    End Sub
+
+    Sub cambiasu()
+        Dim x As Integer
+        Dim y As Integer
+        Dim a As Byte
+
+
+        Dim img As Bitmap = My.Resources.su
+
+        For x = 0 To img.Width - 1
+            For y = 0 To img.Height - 1
+
+                a = img.GetPixel(x, y).A
+
+                If a > 250 Then
+                    img.SetPixel(x, y, My.Settings.coloreup)
+                End If
+
+            Next
+        Next
+
+        PictureBox3.Image = img
+    End Sub
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
 
@@ -85,8 +128,7 @@ Public Class speedmeter
         Else
             Label1.Font = My.Settings.font
             Label2.Font = My.Settings.font
-            Label3.Font = My.Settings.font
-            Label4.Font = My.Settings.font
+
         End If
 
         If My.Settings.colore = Nothing Then
@@ -97,12 +139,12 @@ Public Class speedmeter
 
         If My.Settings.coloredown = Nothing Then
         Else
-            Label3.ForeColor = My.Settings.coloredown
+            cambiagiu()
         End If
 
         If My.Settings.coloreup = Nothing Then
         Else
-            Label4.ForeColor = My.Settings.coloreup
+            cambiasu()
         End If
 
         AddHandler NetworkChange.NetworkAvailabilityChanged, AddressOf OnNetWorkChanged_Event
@@ -137,12 +179,10 @@ Public Class speedmeter
 
         Me.Height = TaskBarRect(0).Height - 1
         Dim mezzo As Integer = Me.Height / 2
-        Label1.Left = Label3.Width + 5
-        Label2.Left = Label4.Width + 5
+        Label1.Left = PictureBox2.Width
+        Label2.Left = PictureBox3.Width
         Me.Label1.Top = mezzo - Label1.Height - 1 '+1
         Me.Label2.Top = mezzo + 1 '- 1
-        Label3.Top = Label1.Top
-        Label4.Top = Label2.Top
 
 
     End Sub
@@ -405,17 +445,31 @@ ByVal dwReserved As Int32) As Boolean
                 Label1.Text = Label1.Text.Replace(",", ".")
                 Label2.Text = Label2.Text.Replace(",", ".")
 
-                If Label1.Width > Label2.Width Then
-                    Me.Width = Label1.Width + Label3.Width + 5
-                Else
-                    Me.Width = Label2.Width + Label4.Width + 5
-                End If
+
 
                 PictureBox1.Top = 10
                 PictureBox1.Left = Label1.Left
                 PictureBox1.Width = Label1.Width / 2
                 PictureBox1.Height = Me.Height - 20
 
+                PictureBox3.Top = Label2.Top
+                PictureBox3.Left = 0
+                PictureBox3.Height = Label2.Height
+                PictureBox3.Width = PictureBox3.Height / 4 * 3
+
+                PictureBox2.Top = Label1.Top
+                PictureBox2.Left = 0
+                PictureBox2.Height = PictureBox3.Height
+                PictureBox2.Width = PictureBox3.Width
+
+                Label1.Left = PictureBox2.Width
+                Label2.Left = PictureBox3.Width
+
+                If Label1.Width > Label2.Width Then
+                    Me.Width = Label1.Width + PictureBox2.Width + 5
+                Else
+                    Me.Width = Label2.Width + PictureBox3.Width + 5
+                End If
 
             Catch ex As Exception
 
@@ -430,7 +484,7 @@ ByVal dwReserved As Int32) As Boolean
     End Sub
 
     Private Sub Label1_Click(sender As Object, e As EventArgs) Handles Label1.Click
-
+        cambiagiu()
     End Sub
 
     Private Sub SelezionaCororeTestoToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SelezionaCororeTestoToolStripMenuItem.Click
@@ -453,8 +507,7 @@ ByVal dwReserved As Int32) As Boolean
         If FontDialog1.ShowDialog <> Windows.Forms.DialogResult.Cancel Then
             Label1.Font = FontDialog1.Font
             Label2.Font = FontDialog1.Font
-            Label3.Font = FontDialog1.Font
-            Label4.Font = FontDialog1.Font
+
             My.Settings.font = FontDialog1.Font
             My.Settings.Save()
             posiziona()
@@ -467,23 +520,25 @@ ByVal dwReserved As Int32) As Boolean
     End Sub
 
     Private Sub SelezionaColoreUploadToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SelezionaColoreUploadToolStripMenuItem.Click
-        Me.ColorDialog1.Color = Label4.ForeColor
+        Me.ColorDialog1.Color = My.Settings.coloreup
         ritorna = True
         If ColorDialog1.ShowDialog <> Windows.Forms.DialogResult.Cancel Then
-            Label4.ForeColor = ColorDialog1.Color
+
             My.Settings.coloreup = ColorDialog1.Color
             My.Settings.Save()
+            cambiasu()
         End If
         ritorna = False
     End Sub
 
-    Private Sub SelezionaColoreDownloadToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SelezionaColoreDownloadToolStripMenuItem.Click
-        Me.ColorDialog1.Color = Label3.ForeColor
+    Private Sub SelezionaColoreDownloadToolStripMenuItem_Click(sender As Object, e As EventArgs)
+        Me.ColorDialog1.Color = My.Settings.coloredown
         ritorna = True
         If ColorDialog1.ShowDialog <> Windows.Forms.DialogResult.Cancel Then
-            Label3.ForeColor = ColorDialog1.Color
+
             My.Settings.coloredown = ColorDialog1.Color
             My.Settings.Save()
+            cambiagiu()
         End If
         ritorna = False
     End Sub
@@ -526,6 +581,40 @@ ByVal dwReserved As Int32) As Boolean
             My.Settings.posizione = Me.Left
             My.Settings.Save()
         End If
+    End Sub
+
+    Private Sub PictureBox3_Click(sender As Object, e As EventArgs) Handles PictureBox3.Click
+
+    End Sub
+
+    Private Sub ContextMenuStrip3_Opening(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles ContextMenuStrip3.Opening
+
+    End Sub
+
+    Private Sub SeleionaColoreUploadToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SeleionaColoreUploadToolStripMenuItem.Click
+        Me.ColorDialog1.Color = My.Settings.coloredown
+        ritorna = True
+        If ColorDialog1.ShowDialog <> Windows.Forms.DialogResult.Cancel Then
+
+            My.Settings.coloredown = ColorDialog1.Color
+            My.Settings.Save()
+            cambiagiu()
+        End If
+        ritorna = False
+    End Sub
+
+    Private Sub SelezionaColoreTestoToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SelezionaColoreTestoToolStripMenuItem.Click
+        Me.ColorDialog1.Color = Label1.ForeColor
+        ritorna = True
+        If ColorDialog1.ShowDialog <> Windows.Forms.DialogResult.Cancel Then
+
+            Label1.ForeColor = ColorDialog1.Color
+            Label2.ForeColor = ColorDialog1.Color
+            My.Settings.colore = ColorDialog1.Color
+            My.Settings.Save()
+
+        End If
+        ritorna = False
     End Sub
 End Class
 

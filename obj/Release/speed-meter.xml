@@ -27,5 +27,15 @@ speed-meter
   Cerca una risorsa localizzata di tipo System.Drawing.Bitmap.
 </summary>
 </member>
+<member name="P:speed_meter.My.Resources.Resources.giu">
+<summary>
+  Cerca una risorsa localizzata di tipo System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:speed_meter.My.Resources.Resources.su">
+<summary>
+  Cerca una risorsa localizzata di tipo System.Drawing.Bitmap.
+</summary>
+</member>
 </members>
 </doc>
