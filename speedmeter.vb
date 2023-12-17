@@ -2,6 +2,7 @@
 Imports System.Net.NetworkInformation
 Imports System.Net.Sockets
 Imports System.Runtime
+Imports System.Runtime.InteropServices
 Imports System.Security.Principal
 Imports System.Windows.Forms.VisualStyles.VisualStyleElement
 
@@ -115,10 +116,31 @@ Public Class speedmeter
 
         PictureBox3.Image = img
     End Sub
+    Public Declare Function FindWindowEx Lib "user32" Alias "FindWindowExA" (ByVal hWnd1 As Integer, ByVal hWnd2 As Integer, ByVal lpsz1 As String, ByVal lpsz2 As String) As Integer
+    Public Declare Function FindWindow Lib "user32" Alias "FindWindowA" (ByVal lpClassName As String, ByVal lpWindowName As String) As Integer
+
+    Public Const SWP_HIDEWINDOW = &H80
+    Public Const SWP_SHOWWINDOW = &H40
+    <StructLayout(LayoutKind.Sequential)> Public Structure RECT
+        Dim Left As Integer
+        Dim Top As Integer
+        Dim Right As Integer
+        Dim Bottom As Integer
+    End Structure
+
+    Declare Function DwmGetWindowAttribute Lib "dwmapi.dll" (ByVal hwnd As IntPtr, ByVal dwAttribute As Integer, ByRef pvAttribute As RECT, ByVal cbAttribute As Integer) As Integer
+
+    Public Declare Function GetWindowRect Lib "user32" (ByVal HWND As Integer, ByRef lpRect As RECT) As Integer
+
+    <DllImport("user32.dll", SetLastError:=True, CharSet:=CharSet.Auto)>
+    Public Shared Function SetParent(ByVal hWndChild As IntPtr, ByVal hWndNewParent As IntPtr) As IntPtr
+    End Function
+
+
+    Dim rectWindow As New RECT
+
+    Dim ShellTrayWnd As Integer
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
-
-
 
         IsAdministrator = New WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator)
         If IsAdministrator Then
@@ -126,10 +148,16 @@ Public Class speedmeter
         End If
         TaskBarRect = FindDockedTaskBars()
 
-        Me.Top = TaskBarRect(0).Top + 1
-        Me.Left = TaskBarRect(0).Width / 2 - Me.Width / 2
 
-        If My.Settings.posizione <> 0 Then
+        ShellTrayWnd = FindWindow("Shell_TrayWnd", vbNullString)
+        Dim TrayNotifyWnd = FindWindowEx(ShellTrayWnd, 0, "TrayNotifyWnd", vbNullString)
+        GetWindowRect(TrayNotifyWnd, rectWindow)
+
+
+        Me.Top = TaskBarRect(0).Top + 1
+        'Me.Left = rectWindow.Left - Me.Width    'TaskBarRect(0).Width / 2 - Me.Width / 2
+
+        If My.Settings.posizione <> -1 Then
             Me.Left = My.Settings.posizione
         End If
 
@@ -189,9 +217,13 @@ Public Class speedmeter
                                  End Sub))
 
         If IO.File.Exists(Application.StartupPath & "\speed-meter.cfg") Then
-            caricaconfig
+            caricaconfig()
         End If
         posiziona()
+
+
+
+
         Timer2_Tick(Nothing, Nothing)
     End Sub
 
@@ -379,7 +411,10 @@ Public Class speedmeter
         If posizione <> -1 Then
             Me.Left = posizione
         Else
-            Me.Left = My.Settings.posizione
+            If My.Settings.posizione <> -1 Then
+                Me.Left = My.Settings.posizione
+            End If
+
         End If
 
         Me.Height = TaskBarRect(0).Height - 1
@@ -708,6 +743,9 @@ ByVal dwReserved As Int32) As Boolean
                 Else
                     Me.Width = Label2.Width + PictureBox3.Width + 5
                 End If
+                If My.Settings.posizione = -1 And posizione = -1 Then
+                    Me.Left = rectWindow.Left - Me.Width
+                End If
 
             Catch ex As Exception
 
@@ -1024,6 +1062,10 @@ ByVal dwReserved As Int32) As Boolean
         End If
         My.Settings.Save()
         salvaconfig("duepunti", My.Settings.duepunti)
+    End Sub
+
+    Private Sub speedmeter_Shown(sender As Object, e As EventArgs) Handles Me.Shown
+        'SetParent(MyBase.Handle, ShellTrayWnd)
     End Sub
 End Class
 
