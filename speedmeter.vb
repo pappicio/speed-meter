@@ -1223,6 +1223,12 @@ ByVal dwReserved As Int32) As Boolean
         End If
         My.Settings.Save()
     End Sub
+
+    Private Sub AboutToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AboutToolStripMenuItem.Click
+        ritorna = True
+        MsgBox("Speed-Meter Version 3.8. Developed by DI RESTA Giuseppe!")
+        ritorna = False
+    End Sub
 End Class
 
 

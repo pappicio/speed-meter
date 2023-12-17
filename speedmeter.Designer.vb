@@ -42,7 +42,11 @@ Partial Class speedmeter
         Me.MbToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.KBToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.KbToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
         Me.VisualizzaIToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator7 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ColoriAutomaticiToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator6 = New System.Windows.Forms.ToolStripSeparator()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.Timer2 = New System.Windows.Forms.Timer(Me.components)
@@ -51,10 +55,8 @@ Partial Class speedmeter
         Me.PictureBox3 = New System.Windows.Forms.PictureBox()
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
-        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ColoriAutomaticiToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator6 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ToolStripSeparator7 = New System.Windows.Forms.ToolStripSeparator()
+        Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator8 = New System.Windows.Forms.ToolStripSeparator()
         Me.ContextMenuStrip1.SuspendLayout()
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -75,9 +77,9 @@ Partial Class speedmeter
         'ContextMenuStrip1
         '
         Me.ContextMenuStrip1.ImageScalingSize = New System.Drawing.Size(20, 20)
-        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SpostamiToolStripMenuItem, Me.ToolStripSeparator2, Me.SelezioneNetworkToolStripMenuItem, Me.ToolStripSeparator1, Me.SeelzionaFontTestoToolStripMenuItem, Me.SelezionaCororeTestoToolStripMenuItem, Me.ToolStripSeparator5, Me.SelezioneColoreDownloadToolStripMenuItem, Me.SelezionaColoreUploadToolStripMenuItem1, Me.ToolStripSeparator3, Me.SelezionaBandWidthToolStripMenuItem, Me.ToolStripSeparator4, Me.VisualizzaIToolStripMenuItem, Me.ToolStripSeparator7, Me.ColoriAutomaticiToolStripMenuItem, Me.ToolStripSeparator6})
+        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SpostamiToolStripMenuItem, Me.ToolStripSeparator2, Me.SelezioneNetworkToolStripMenuItem, Me.ToolStripSeparator1, Me.SeelzionaFontTestoToolStripMenuItem, Me.SelezionaCororeTestoToolStripMenuItem, Me.ToolStripSeparator5, Me.SelezioneColoreDownloadToolStripMenuItem, Me.SelezionaColoreUploadToolStripMenuItem1, Me.ToolStripSeparator3, Me.SelezionaBandWidthToolStripMenuItem, Me.ToolStripSeparator4, Me.VisualizzaIToolStripMenuItem, Me.ToolStripSeparator7, Me.ColoriAutomaticiToolStripMenuItem, Me.ToolStripSeparator6, Me.AboutToolStripMenuItem, Me.ToolStripSeparator8})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(264, 290)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(264, 320)
         '
         'SpostamiToolStripMenuItem
         '
@@ -180,11 +182,32 @@ Partial Class speedmeter
         Me.KbToolStripMenuItem1.Size = New System.Drawing.Size(114, 26)
         Me.KbToolStripMenuItem1.Text = "Kb"
         '
+        'ToolStripSeparator4
+        '
+        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(260, 6)
+        '
         'VisualizzaIToolStripMenuItem
         '
         Me.VisualizzaIToolStripMenuItem.Name = "VisualizzaIToolStripMenuItem"
         Me.VisualizzaIToolStripMenuItem.Size = New System.Drawing.Size(263, 24)
         Me.VisualizzaIToolStripMenuItem.Text = "Blocca posizione a DX"
+        '
+        'ToolStripSeparator7
+        '
+        Me.ToolStripSeparator7.Name = "ToolStripSeparator7"
+        Me.ToolStripSeparator7.Size = New System.Drawing.Size(260, 6)
+        '
+        'ColoriAutomaticiToolStripMenuItem
+        '
+        Me.ColoriAutomaticiToolStripMenuItem.Name = "ColoriAutomaticiToolStripMenuItem"
+        Me.ColoriAutomaticiToolStripMenuItem.Size = New System.Drawing.Size(263, 24)
+        Me.ColoriAutomaticiToolStripMenuItem.Text = "Colori Automatici"
+        '
+        'ToolStripSeparator6
+        '
+        Me.ToolStripSeparator6.Name = "ToolStripSeparator6"
+        Me.ToolStripSeparator6.Size = New System.Drawing.Size(260, 6)
         '
         'Label2
         '
@@ -243,26 +266,16 @@ Partial Class speedmeter
         Me.PictureBox1.TabStop = False
         Me.PictureBox1.Visible = False
         '
-        'ToolStripSeparator4
+        'AboutToolStripMenuItem
         '
-        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
-        Me.ToolStripSeparator4.Size = New System.Drawing.Size(260, 6)
+        Me.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
+        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(263, 24)
+        Me.AboutToolStripMenuItem.Text = "About me..."
         '
-        'ColoriAutomaticiToolStripMenuItem
+        'ToolStripSeparator8
         '
-        Me.ColoriAutomaticiToolStripMenuItem.Name = "ColoriAutomaticiToolStripMenuItem"
-        Me.ColoriAutomaticiToolStripMenuItem.Size = New System.Drawing.Size(263, 24)
-        Me.ColoriAutomaticiToolStripMenuItem.Text = "Colori Automatici"
-        '
-        'ToolStripSeparator6
-        '
-        Me.ToolStripSeparator6.Name = "ToolStripSeparator6"
-        Me.ToolStripSeparator6.Size = New System.Drawing.Size(260, 6)
-        '
-        'ToolStripSeparator7
-        '
-        Me.ToolStripSeparator7.Name = "ToolStripSeparator7"
-        Me.ToolStripSeparator7.Size = New System.Drawing.Size(260, 6)
+        Me.ToolStripSeparator8.Name = "ToolStripSeparator8"
+        Me.ToolStripSeparator8.Size = New System.Drawing.Size(260, 6)
         '
         'speedmeter
         '
@@ -325,4 +338,6 @@ Partial Class speedmeter
     Friend WithEvents ToolStripSeparator7 As ToolStripSeparator
     Friend WithEvents ColoriAutomaticiToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ToolStripSeparator6 As ToolStripSeparator
+    Friend WithEvents AboutToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator8 As ToolStripSeparator
 End Class
