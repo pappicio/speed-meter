@@ -9,10 +9,10 @@ Imports System.Runtime.InteropServices
 ' Controllare i valori degli attributi degli assembly
 
 <Assembly: AssemblyTitle("speed-meter")>
-<Assembly: AssemblyDescription("")>
-<Assembly: AssemblyCompany("")>
+<Assembly: AssemblyDescription("speed-meter")>
+<Assembly: AssemblyCompany("speed-meter")>
 <Assembly: AssemblyProduct("speed-meter")>
-<Assembly: AssemblyCopyright("Copyright ©  2023")>
+<Assembly: AssemblyCopyright("Copyright ©  2099")>
 <Assembly: AssemblyTrademark("")>
 
 <Assembly: ComVisible(False)>
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' usando l'asterisco '*' come illustrato di seguito:
 ' <Assembly: AssemblyVersion("1.0.*")>
 
-<Assembly: AssemblyVersion("1.0.0.0")>
-<Assembly: AssemblyFileVersion("1.0.0.0")>
+<Assembly: AssemblyVersion("5.5.0.0")>
+<Assembly: AssemblyFileVersion("5.5.0.0")>
