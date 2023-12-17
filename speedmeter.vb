@@ -136,10 +136,22 @@ Public Class speedmeter
     Public Shared Function SetParent(ByVal hWndChild As IntPtr, ByVal hWndNewParent As IntPtr) As IntPtr
     End Function
 
+    Declare Function GetPixel Lib "gdi32" Alias "GetPixel" (ByVal hdc As Long, ByVal x As Long, ByVal y As Long) As Long
+    Declare Function GetDesktopWindow Lib "user32" Alias "GetDesktopWindow" () As Long
+    Declare Function GetWindowDC Lib "user32" Alias "GetWindowDC" (ByVal hwnd As Long) As Long
 
     Dim rectWindow As New RECT
 
-    Dim ShellTrayWnd As Integer
+    Dim ShellTrayWnd As Long
+    Private Const DESKTOPVERTRES As Integer = &H75
+    Private Const DESKTOPHORZRES As Integer = &H76
+    <Runtime.InteropServices.DllImport("gdi32.dll")> Private Shared Function GetDeviceCaps(ByVal hdc As IntPtr, ByVal nIndex As Integer) As Integer
+    End Function
+
+    Public Function GetPixelColor(ByVal x As Long, ByVal y As Long) As Long
+        Return GetPixel(GetWindowDC(GetDesktopWindow), x, y)
+    End Function
+
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
         IsAdministrator = New WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator)
@@ -476,7 +488,10 @@ Public Class speedmeter
         End If
 
         If Me.Left > TaskBarRect(0).Width Then
-            Me.Left = TaskBarRect(0).Width - Me.Width
+            Me.Left = rectWindow.Left - Me.Width
+            My.Settings.posizione = Me.Left
+            My.Settings.Save()
+            salvaconfig("posizione", Me.Left)
         End If
         Me.TopMost = True
         Me.Visible = True
@@ -746,7 +761,42 @@ ByVal dwReserved As Int32) As Boolean
                 If My.Settings.posizione = -1 And posizione = -1 Then
                     Me.Left = rectWindow.Left - Me.Width
                 End If
+                Dim TmpScrn As Screen = Screen.FromControl(Me)
 
+                Dim sclX As Single
+                Dim sclY As Single
+                Using g As Graphics = Graphics.FromHwnd(IntPtr.Zero)
+                    Dim hdc As IntPtr = g.GetHdc
+                    Dim TrueScreenSize As New Size(GetDeviceCaps(hdc, DESKTOPHORZRES), GetDeviceCaps(hdc, DESKTOPVERTRES))
+                    sclX = CSng(Math.Round((TrueScreenSize.Width / TmpScrn.Bounds.Width), 2))
+                    sclY = CSng(Math.Round((TrueScreenSize.Height / TmpScrn.Bounds.Height), 2))
+                    g.ReleaseHdc(hdc)
+                End Using
+
+                Dim p As New Point
+                p.X = Me.Left * sclX - 1
+                p.Y = Me.Top * scly + 10
+                Dim c As Color = Nothing
+                Using bmp As New Bitmap(1, 1)
+                    Using g As Graphics = Graphics.FromImage(bmp)
+                        g.CopyFromScreen(p,
+                                          New Point(0, 0), New Size(1, 1))
+                    End Using
+                    c = bmp.GetPixel(0, 0)
+                    Me.Invalidate()
+                End Using
+
+                ''' Me.BackColor = c
+                If c.R > 127 And c.G > 127 And c.B > 127 Then
+                    Label1.ForeColor = Color.Black
+                    Label2.ForeColor = Color.Black
+                Else
+                    Label1.ForeColor = Color.White
+                    Label2.ForeColor = Color.White
+                End If
+                My.Settings.colore = c
+                My.Settings.Save()
+                salvaconfig("labelcolor", c.ToString)
             Catch ex As Exception
 
             End Try
