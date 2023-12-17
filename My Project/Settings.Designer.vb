@@ -76,73 +76,85 @@ Namespace My
                 Me("font") = value
             End Set
         End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute()>  _
-        Public Property colore() As Global.System.Drawing.Color
-            Get
-                Return CType(Me("colore"),Global.System.Drawing.Color)
-            End Get
-            Set
-                Me("colore") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute()>  _
-        Public Property coloredown() As Global.System.Drawing.Color
-            Get
-                Return CType(Me("coloredown"),Global.System.Drawing.Color)
-            End Get
-            Set
-                Me("coloredown") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute()>  _
-        Public Property coloreup() As Global.System.Drawing.Color
-            Get
-                Return CType(Me("coloreup"),Global.System.Drawing.Color)
-            End Get
-            Set
-                Me("coloreup") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+
+        <Global.System.Configuration.UserScopedSettingAttribute(),
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),
+         Global.System.Configuration.DefaultSettingValueAttribute("")>
         Public Property nic() As String
             Get
-                Return CType(Me("nic"),String)
+                Return CType(Me("nic"), String)
             End Get
             Set
-                Me("nic") = value
+                Me("nic") = Value
             End Set
         End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("Mb")>  _
+
+        <Global.System.Configuration.UserScopedSettingAttribute(),
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),
+         Global.System.Configuration.DefaultSettingValueAttribute("Mb")>
         Public Property banda() As String
             Get
-                Return CType(Me("banda"),String)
+                Return CType(Me("banda"), String)
             End Get
             Set
-                Me("banda") = value
+                Me("banda") = Value
             End Set
         End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("no")>  _
-        Public Property duepunti() As String
+
+        <Global.System.Configuration.UserScopedSettingAttribute(),
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),
+         Global.System.Configuration.DefaultSettingValueAttribute("si")>
+        Public Property bloccaposizione() As String
             Get
-                Return CType(Me("duepunti"),String)
+                Return CType(Me("bloccaposizione"), String)
             End Get
             Set
-                Me("duepunti") = value
+                Me("bloccaposizione") = Value
+            End Set
+        End Property
+
+        <Global.System.Configuration.UserScopedSettingAttribute(),
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute()>
+        Public Property colore() As Global.System.Drawing.Color
+            Get
+                Return CType(Me("colore"), Global.System.Drawing.Color)
+            End Get
+            Set
+                Me("colore") = Value
+            End Set
+        End Property
+
+        <Global.System.Configuration.UserScopedSettingAttribute(),
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute()>
+        Public Property coloredown() As Global.System.Drawing.Color
+            Get
+                Return CType(Me("coloredown"), Global.System.Drawing.Color)
+            End Get
+            Set
+                Me("coloredown") = Value
+            End Set
+        End Property
+
+        <Global.System.Configuration.UserScopedSettingAttribute(),
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute()>
+        Public Property coloreup() As Global.System.Drawing.Color
+            Get
+                Return CType(Me("coloreup"), Global.System.Drawing.Color)
+            End Get
+            Set
+                Me("coloreup") = Value
+            End Set
+        End Property
+
+        <Global.System.Configuration.UserScopedSettingAttribute(),
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),
+         Global.System.Configuration.DefaultSettingValueAttribute("si")>
+        Public Property coloriautomatici() As String
+            Get
+                Return CType(Me("coloriautomatici"), String)
+            End Get
+            Set
+                Me("coloriautomatici") = Value
             End Set
         End Property
     End Class

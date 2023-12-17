@@ -8,6 +8,15 @@
     <Setting Name="font" Type="System.Drawing.Font" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="nic" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="banda" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Mb</Value>
+    </Setting>
+    <Setting Name="bloccaposizione" Type="System.String" Scope="User">
+      <Value Profile="(Default)">si</Value>
+    </Setting>
     <Setting Name="colore" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
@@ -17,14 +26,8 @@
     <Setting Name="coloreup" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="nic" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="banda" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Mb</Value>
-    </Setting>
-    <Setting Name="duepunti" Type="System.String" Scope="User">
-      <Value Profile="(Default)">no</Value>
+    <Setting Name="coloriautomatici" Type="System.String" Scope="User">
+      <Value Profile="(Default)">si</Value>
     </Setting>
   </Settings>
 </SettingsFile>

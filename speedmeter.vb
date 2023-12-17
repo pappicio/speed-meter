@@ -56,6 +56,11 @@ Public Class speedmeter
             End If
         End If
 
+
+        ShellTrayWnd = FindWindow("Shell_TrayWnd", vbNullString)
+        Dim TrayNotifyWnd = FindWindowEx(ShellTrayWnd, 0, "TrayNotifyWnd", vbNullString)
+        GetWindowRect(TrayNotifyWnd, rectWindow)
+
         Return DockedRects
     End Function
     Dim TaskBarRect As Rectangle()
@@ -161,15 +166,12 @@ Public Class speedmeter
         TaskBarRect = FindDockedTaskBars()
 
 
-        ShellTrayWnd = FindWindow("Shell_TrayWnd", vbNullString)
-        Dim TrayNotifyWnd = FindWindowEx(ShellTrayWnd, 0, "TrayNotifyWnd", vbNullString)
-        GetWindowRect(TrayNotifyWnd, rectWindow)
-
-
         Me.Top = TaskBarRect(0).Top + 1
-        'Me.Left = rectWindow.Left - Me.Width    'TaskBarRect(0).Width / 2 - Me.Width / 2
+        If bloccaposizione Then
+            Me.Left = rectWindow.Left - Me.Width
+        End If
 
-        If My.Settings.posizione <> -1 Then
+        If My.Settings.posizione <> -1 And bloccaposizione = False Then
             Me.Left = My.Settings.posizione
         End If
 
@@ -182,32 +184,63 @@ Public Class speedmeter
 
         If My.Settings.colore = Nothing Then
         Else
-            Label1.ForeColor = My.Settings.colore
-            Label2.ForeColor = My.Settings.colore
+            If coloriautomatici = False Then
+                Label1.ForeColor = My.Settings.colore
+                Label2.ForeColor = My.Settings.colore
+            End If
         End If
 
         If My.Settings.coloredown = Nothing Then
         Else
-            cambiagiu()
+            If coloriautomatici = False Then
+                cambiagiu()
+            End If
+
         End If
 
         If My.Settings.coloreup = Nothing Then
         Else
-            cambiasu()
+            If coloriautomatici = False Then
+                cambiasu()
+            End If
         End If
+
         If My.Settings.banda <> "" Then
             bandwidth = My.Settings.banda
         Else
             bandwidth = "Mb"
         End If
-        If My.Settings.duepunti.ToLower.Trim = "si" Then
-            duepunti = True
+        If My.Settings.bloccaposizione.ToLower.Trim = "si" Then
+            bloccaposizione = True
             VisualizzaIToolStripMenuItem.Checked = True
         Else
-            duepunti = False
+            bloccaposizione = False
             VisualizzaIToolStripMenuItem.Checked = False
         End If
 
+        If My.Settings.coloriautomatici.ToLower.Trim = "si" Then
+            coloriautomatici = True
+            ColoriAutomaticiToolStripMenuItem.Checked = True
+
+            SelezioneColoreDownloadToolStripMenuItem.Visible = False
+            SelezionaColoreUploadToolStripMenuItem1.Visible = False
+            SelezionaCororeTestoToolStripMenuItem.Visible = False
+        Else
+            coloriautomatici = False
+            ColoriAutomaticiToolStripMenuItem.Checked = False
+
+            SelezioneColoreDownloadToolStripMenuItem.Visible = True
+            SelezionaColoreUploadToolStripMenuItem1.Visible = True
+            SelezionaCororeTestoToolStripMenuItem.Visible = True
+
+        End If
+        If bloccaposizione Then
+            SpostamiToolStripMenuItem.Visible = False
+
+        Else
+
+            SpostamiToolStripMenuItem.Visible = True
+        End If
         Try
             For Each i As ToolStripMenuItem In SelezionaBandWidthToolStripMenuItem.DropDownItems
                 i.Checked = False
@@ -228,9 +261,9 @@ Public Class speedmeter
                                      loadnic()
                                  End Sub))
 
-        If IO.File.Exists(Application.StartupPath & "\speed-meter.cfg") Then
-            caricaconfig()
-        End If
+        '' If IO.File.Exists(Application.StartupPath & "\speed-meter.cfg") Then
+        ''caricaconfig()
+        ''End If
         posiziona()
 
 
@@ -242,7 +275,7 @@ Public Class speedmeter
     Dim fontx As Font
     Dim labelcolor As Color
     Dim posizione As Integer = -1
-    Dim duepunti As Boolean = True
+    Dim bloccaposizione As Boolean = True
     Sub caricaconfig()
 
 
@@ -257,14 +290,14 @@ Public Class speedmeter
 
             '[duepunti]=no
 
-            If str.StartsWith("[duepunti]") Then
+            If str.StartsWith("[bloccaposizione]") Then
                 Try
                     str = Strings.Mid(str, str.LastIndexOf("=") + 2, str.Length).Trim
 
                     If str.ToLower.Trim.StartsWith("s") Then
-                        duepunti = True
+                        bloccaposizione = True
                     Else
-                        duepunti = False
+                        bloccaposizione = False
                     End If
 
                 Catch ex As Exception
@@ -420,13 +453,17 @@ Public Class speedmeter
     End Sub
 
     Sub posiziona()
-        If posizione <> -1 Then
-            Me.Left = posizione
-        Else
-            If My.Settings.posizione <> -1 Then
+        If bloccaposizione = False Then
+            If posizione <> -1 Then
+                Me.Left = posizione
+            ElseIf My.Settings.posizione <> -1 Then
                 Me.Left = My.Settings.posizione
             End If
-
+        Else
+            Me.Left = rectWindow.Left - Me.Width
+        End If
+        If bloccaposizione Then
+            Me.Left = rectWindow.Left - Me.Width
         End If
 
         Me.Height = TaskBarRect(0).Height - 1
@@ -454,10 +491,10 @@ Public Class speedmeter
                 oLink = oShell.CreateShortcut(ShortCutPath & "\" & TargetName & ".lnk")
 
                 oLink.TargetPath = Application.ExecutablePath
-                ''' oLink.WindowStyle = 1
+                '' oLink.WindowStyle = 1
                 oLink.Save()
 
-                MsgBox("Eseguito con diritti AMMINISTRATORE, Link ad esecuzione autmatica allusers creata!" & vbCr & " ora mi chiudo, rieseguimi con diritti utente!")
+                MsgBox("Eseguito con diritti AMMINISTRATORE, Link ad esecuzione autmatica allusers creata!" & vbCr & vbCr & " ora mi chiudo, rieseguimi con diritti utente!")
 
                 End
             Catch ex As Exception
@@ -487,12 +524,15 @@ Public Class speedmeter
             Me.Left = TaskBarRect(0).Left
         End If
 
-        If Me.Left > TaskBarRect(0).Width Then
+        If Me.Left > rectWindow.Left - Me.Width Then
             Me.Left = rectWindow.Left - Me.Width
             My.Settings.posizione = Me.Left
-            My.Settings.Save()
-            salvaconfig("posizione", Me.Left)
         End If
+
+        If bloccaposizione Then
+            Me.Left = rectWindow.Left - Me.Width
+        End If
+
         Me.TopMost = True
         Me.Visible = True
         Application.DoEvents()
@@ -500,19 +540,20 @@ Public Class speedmeter
     Dim ritorna As Boolean = False
     Private Sub Timer2_Tick(sender As Object, e As EventArgs) Handles Timer2.Tick
 
-        If IO.File.Exists(Application.StartupPath & "\speed-meter.cfg") Then
-            Dim TmpScrn As Screen = Screen.FromControl(Me)
+        ''  If IO.File.Exists(Application.StartupPath & "\speed-meter.cfg") Then
+        Dim TmpScrn As Screen = Screen.FromControl(Me)
             Dim size As Rectangle = TmpScrn.Bounds
-            If IO.File.GetLastWriteTime(Application.StartupPath & "\speed-meter.cfg") <> lastedit Or sizeold <> size Then
-                caricaconfig()
-                sizeold = size
-                posiziona()
-            End If
+        ''  If IO.File.GetLastWriteTime(Application.StartupPath & "\speed-meter.cfg") <> lastedit Or sizeold <> size Then
+
+        ''caricaconfig()
+        If sizeold <> size Then
+            sizeold = size
+            posiziona()
         End If
 
 
 
-        '''autonic()
+        ''autonic()
 
         BandSec()
     End Sub
@@ -722,13 +763,9 @@ ByVal dwReserved As Int32) As Boolean
             LastUpload = NicStats.BytesSent
             LastDownload = NicStats.BytesReceived
             Try
-                If duepunti Then
-                    Label1.Text = ": " & BytesConverter(If(Down < 0, 0, Down)) & "/s"
-                    Label2.Text = ": " & BytesConverter(If(Up < 0, 0, Up)) & "/s"
-                Else
-                    Label1.Text = " " & BytesConverter(If(Down < 0, 0, Down)) & "/s"
-                    Label2.Text = " " & BytesConverter(If(Up < 0, 0, Up)) & "/s"
-                End If
+
+                Label1.Text = " " & BytesConverter(If(Down < 0, 0, Down)) & "/s"
+                Label2.Text = " " & BytesConverter(If(Up < 0, 0, Up)) & "/s"
 
                 Label1.Text = Label1.Text.Replace(",", ".")
                 Label2.Text = Label2.Text.Replace(",", ".")
@@ -758,7 +795,8 @@ ByVal dwReserved As Int32) As Boolean
                 Else
                     Me.Width = Label2.Width + PictureBox3.Width + 5
                 End If
-                If My.Settings.posizione = -1 And posizione = -1 Then
+
+                If (My.Settings.posizione = -1 And posizione = -1) Or bloccaposizione Then
                     Me.Left = rectWindow.Left - Me.Width
                 End If
                 Dim TmpScrn As Screen = Screen.FromControl(Me)
@@ -775,7 +813,7 @@ ByVal dwReserved As Int32) As Boolean
 
                 Dim p As New Point
                 p.X = Me.Left * sclX - 1
-                p.Y = Me.Top * scly + 10
+                p.Y = Me.Top * sclY + 10
                 Dim c As Color = Nothing
                 Using bmp As New Bitmap(1, 1)
                     Using g As Graphics = Graphics.FromImage(bmp)
@@ -786,17 +824,19 @@ ByVal dwReserved As Int32) As Boolean
                     Me.Invalidate()
                 End Using
 
-                ''' Me.BackColor = c
-                If c.R > 127 And c.G > 127 And c.B > 127 Then
-                    Label1.ForeColor = Color.Black
-                    Label2.ForeColor = Color.Black
-                Else
-                    Label1.ForeColor = Color.White
-                    Label2.ForeColor = Color.White
+                If coloriautomatici Then
+                    If c.R > 127 And c.G > 127 And c.B > 127 Then
+                        Label1.ForeColor = Color.Black
+                        Label2.ForeColor = Color.Black
+                    Else
+                        Label1.ForeColor = Color.White
+                        Label2.ForeColor = Color.White
+                    End If
+                    My.Settings.colore = c
+                    My.Settings.Save()
                 End If
-                My.Settings.colore = c
-                My.Settings.Save()
-                salvaconfig("labelcolor", c.ToString)
+
+                ''salvaconfig("labelcolor", c.ToString)
             Catch ex As Exception
 
             End Try
@@ -814,6 +854,9 @@ ByVal dwReserved As Int32) As Boolean
     End Sub
 
     Private Sub SelezionaCororeTestoToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SelezionaCororeTestoToolStripMenuItem.Click
+        If coloriautomatici Then
+            Return
+        End If
         Me.ColorDialog1.Color = Label1.ForeColor
         ritorna = True
         If ColorDialog1.ShowDialog <> Windows.Forms.DialogResult.Cancel Then
@@ -822,7 +865,7 @@ ByVal dwReserved As Int32) As Boolean
             Label2.ForeColor = ColorDialog1.Color
             My.Settings.colore = ColorDialog1.Color
             My.Settings.Save()
-            salvaconfig("labelcolor", Label1.ForeColor.Name.ToString.ToLower)
+            ''salvaconfig("labelcolor", Label1.ForeColor.Name.ToString.ToLower)
         End If
         ritorna = False
     End Sub
@@ -859,7 +902,7 @@ ByVal dwReserved As Int32) As Boolean
             Else
                 f = a & "," & b & "," & c
             End If
-            salvaconfig("font", f)
+            ''salvaconfig("font", f)
 
         End If
         ritorna = False
@@ -894,6 +937,9 @@ ByVal dwReserved As Int32) As Boolean
     End Sub
 
     Private Sub SpostamiToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SpostamiToolStripMenuItem.Click
+        If bloccaposizione Then
+            Exit Sub
+        End If
         Me.PictureBox1.Visible = Not Me.PictureBox1.Visible
         SpostamiToolStripMenuItem.Checked = Me.PictureBox1.Visible
         If SpostamiToolStripMenuItem.Checked Then
@@ -922,18 +968,26 @@ ByVal dwReserved As Int32) As Boolean
             ' Get the new form position
             mousePos.Offset(mouseOffset.X, mouseOffset.Y)
             Me.Left = mousePos.X
+            If Me.Left < TaskBarRect(0).Left Then
+                Me.Left = TaskBarRect(0).Left
+            End If
+
+            If Me.Left > rectWindow.Left - Me.Width Then
+                Me.Left = rectWindow.Left - Me.Width
+            End If
         End If
     End Sub
 
     Private Sub PictureBox1_MouseUp(sender As Object, e As MouseEventArgs) Handles PictureBox1.MouseUp
         If e.Button = MouseButtons.Left Then
             isMouseDown = False
-            My.Settings.posizione = Me.Left
+            My.Settings.posizione = rectWindow.Left - Me.Width 'Me.Left
             My.Settings.Save()
-            salvaconfig("posizione", posizione.ToString)
+            '' salvaconfig("posizione", posizione.ToString)
         End If
     End Sub
     Sub salvaconfig(cosa As String, valore As String)
+        Return
         If IO.File.Exists(Application.StartupPath & "\speed-meter.cfg") Then
             Dim linee As String() = IO.File.ReadAllLines(Application.StartupPath & "\speed-meter.cfg")
             For x As Integer = 0 To linee.Count - 1
@@ -982,6 +1036,9 @@ ByVal dwReserved As Int32) As Boolean
     End Sub
 
     Private Sub SelezioneColoreDownloadToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SelezioneColoreDownloadToolStripMenuItem.Click
+        If coloriautomatici Then
+            Return
+        End If
         Me.ColorDialog1.Color = My.Settings.coloredown
         ritorna = True
         If ColorDialog1.ShowDialog <> Windows.Forms.DialogResult.Cancel Then
@@ -989,12 +1046,15 @@ ByVal dwReserved As Int32) As Boolean
             My.Settings.coloredown = ColorDialog1.Color
             My.Settings.Save()
             cambiagiu()
-            salvaconfig("downcolor", ColorDialog1.Color.Name.ToString.ToLower)
+            ''salvaconfig("downcolor", ColorDialog1.Color.Name.ToString.ToLower)
         End If
         ritorna = False
     End Sub
 
     Private Sub SelezionaColoreUploadToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles SelezionaColoreUploadToolStripMenuItem1.Click
+        If coloriautomatici Then
+            Return
+        End If
         Me.ColorDialog1.Color = My.Settings.coloreup
         ritorna = True
         If ColorDialog1.ShowDialog <> Windows.Forms.DialogResult.Cancel Then
@@ -1002,7 +1062,7 @@ ByVal dwReserved As Int32) As Boolean
             My.Settings.coloreup = ColorDialog1.Color
             My.Settings.Save()
             cambiasu()
-            salvaconfig("upcolor", ColorDialog1.Color.Name.ToString.ToLower)
+            '' salvaconfig("upcolor", ColorDialog1.Color.Name.ToString.ToLower)
         End If
         ritorna = False
     End Sub
@@ -1099,23 +1159,69 @@ ByVal dwReserved As Int32) As Boolean
 
     Private Sub VisualizzaIToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles VisualizzaIToolStripMenuItem.Click
         If VisualizzaIToolStripMenuItem.Checked Then
+            ritorna = True
+            Dim x = MsgBox("Disabilitare il 'Blocco Automatico a DX' potrebbe causare problemi di visualizzazione delle info" & vbCr & vbCr &
+                           "Vuoi continuare?", vbYesNo)
+            If x = vbNo Then
+                ritorna = False
+                Exit Sub
+            End If
+            ritorna = False
             VisualizzaIToolStripMenuItem.Checked = False
-            duepunti = False
+
+            SpostamiToolStripMenuItem.Visible = True
+            bloccaposizione = False
         Else
             VisualizzaIToolStripMenuItem.Checked = True
-            duepunti = True
+
+            SpostamiToolStripMenuItem.Visible = False
+            bloccaposizione = True
         End If
-        If duepunti Then
-            My.Settings.duepunti = "si"
+        If bloccaposizione Then
+            My.Settings.bloccaposizione = "si"
         Else
-            My.Settings.duepunti = "no"
+            My.Settings.bloccaposizione = "no"
         End If
         My.Settings.Save()
-        salvaconfig("duepunti", My.Settings.duepunti)
+        ''salvaconfig("bloccaposizione", My.Settings.bloccaposizione)
     End Sub
 
     Private Sub speedmeter_Shown(sender As Object, e As EventArgs) Handles Me.Shown
         'SetParent(MyBase.Handle, ShellTrayWnd)
+    End Sub
+
+    Dim coloriautomatici As Boolean = True
+    Private Sub ColoriAutomaticiToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ColoriAutomaticiToolStripMenuItem.Click
+        If ColoriAutomaticiToolStripMenuItem.Checked Then
+            ritorna = True
+            Dim x = MsgBox("Disabilitare i 'Colori automatici' potrebbe causare problemi di visualizzazione delle info" & vbCr & vbCr &
+                           "Vuoi continuare?", vbYesNo)
+            If x = vbNo Then
+                ritorna = False
+                Exit Sub
+            End If
+            ritorna = False
+            ColoriAutomaticiToolStripMenuItem.Checked = False
+
+            SelezioneColoreDownloadToolStripMenuItem.Visible = True
+            SelezionaColoreUploadToolStripMenuItem1.Visible = True
+            SelezionaCororeTestoToolStripMenuItem.Visible = True
+            coloriautomatici = False
+
+        Else
+            ColoriAutomaticiToolStripMenuItem.Checked = True
+            coloriautomatici = True
+
+            SelezioneColoreDownloadToolStripMenuItem.Visible = False
+            SelezionaColoreUploadToolStripMenuItem1.Visible = False
+            SelezionaCororeTestoToolStripMenuItem.Visible = False
+        End If
+        If coloriautomatici Then
+            My.Settings.coloriautomatici = "si"
+        Else
+            My.Settings.coloriautomatici = "no"
+        End If
+        My.Settings.Save()
     End Sub
 End Class
 
