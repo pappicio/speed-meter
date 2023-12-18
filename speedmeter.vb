@@ -157,7 +157,10 @@ Public Class speedmeter
         Return GetPixel(GetWindowDC(GetDesktopWindow), x, y)
     End Function
 
+
+
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
 
         IsAdministrator = New WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator)
         If IsAdministrator Then
@@ -1232,6 +1235,14 @@ ByVal dwReserved As Int32) As Boolean
 
     Private Sub CambiaLinkSpeedTestToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CambiaLinkSpeedTestToolStripMenuItem.Click
         ritorna = True
+
+        Dim x = MsgBox("Cambiare sito per efettuare lo Speed Test?" & vbCr & vbCr &
+                           "Vuoi continuare?", vbYesNo)
+        If x = vbNo Then
+            ritorna = False
+            Exit Sub
+        End If
+
         Dim StatusDate = InputBox("Inserisci il nuovo link per eddettuare lo SpeedTest (esempio: speedtest.net)", "Modifica link Speedtest", My.Settings.speedtest)
         If StatusDate.Trim = "" Then
             ritorna = False

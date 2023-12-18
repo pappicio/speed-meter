@@ -76,85 +76,109 @@ Namespace My
                 Me("font") = value
             End Set
         End Property
-
-        <Global.System.Configuration.UserScopedSettingAttribute(),
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),
-         Global.System.Configuration.DefaultSettingValueAttribute("")>
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
         Public Property nic() As String
             Get
-                Return CType(Me("nic"), String)
+                Return CType(Me("nic"),String)
             End Get
             Set
-                Me("nic") = Value
+                Me("nic") = value
             End Set
         End Property
-
-        <Global.System.Configuration.UserScopedSettingAttribute(),
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),
-         Global.System.Configuration.DefaultSettingValueAttribute("Mb")>
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("Mb")>  _
         Public Property banda() As String
             Get
-                Return CType(Me("banda"), String)
+                Return CType(Me("banda"),String)
             End Get
             Set
-                Me("banda") = Value
+                Me("banda") = value
             End Set
         End Property
-
-        <Global.System.Configuration.UserScopedSettingAttribute(),
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),
-         Global.System.Configuration.DefaultSettingValueAttribute("si")>
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("si")>  _
         Public Property bloccaposizione() As String
             Get
-                Return CType(Me("bloccaposizione"), String)
+                Return CType(Me("bloccaposizione"),String)
             End Get
             Set
-                Me("bloccaposizione") = Value
+                Me("bloccaposizione") = value
             End Set
         End Property
-
-        <Global.System.Configuration.UserScopedSettingAttribute(),
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute()>
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute()>  _
         Public Property colore() As Global.System.Drawing.Color
             Get
-                Return CType(Me("colore"), Global.System.Drawing.Color)
+                Return CType(Me("colore"),Global.System.Drawing.Color)
             End Get
             Set
-                Me("colore") = Value
+                Me("colore") = value
             End Set
         End Property
-
-        <Global.System.Configuration.UserScopedSettingAttribute(),
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute()>
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute()>  _
         Public Property coloredown() As Global.System.Drawing.Color
             Get
-                Return CType(Me("coloredown"), Global.System.Drawing.Color)
+                Return CType(Me("coloredown"),Global.System.Drawing.Color)
             End Get
             Set
-                Me("coloredown") = Value
+                Me("coloredown") = value
             End Set
         End Property
-
-        <Global.System.Configuration.UserScopedSettingAttribute(),
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute()>
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute()>  _
         Public Property coloreup() As Global.System.Drawing.Color
             Get
-                Return CType(Me("coloreup"), Global.System.Drawing.Color)
+                Return CType(Me("coloreup"),Global.System.Drawing.Color)
             End Get
             Set
-                Me("coloreup") = Value
+                Me("coloreup") = value
             End Set
         End Property
-
-        <Global.System.Configuration.UserScopedSettingAttribute(),
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),
-         Global.System.Configuration.DefaultSettingValueAttribute("si")>
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("si")>  _
         Public Property coloriautomatici() As String
             Get
-                Return CType(Me("coloriautomatici"), String)
+                Return CType(Me("coloriautomatici"),String)
             End Get
             Set
-                Me("coloriautomatici") = Value
+                Me("coloriautomatici") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("http://10.111.253.2/")>  _
+        Public Property speedtest() As String
+            Get
+                Return CType(Me("speedtest"),String)
+            End Get
+            Set
+                Me("speedtest") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property Impostazione() As String
+            Get
+                Return CType(Me("Impostazione"),String)
+            End Get
+            Set
+                Me("Impostazione") = value
             End Set
         End Property
     End Class

@@ -29,5 +29,11 @@
     <Setting Name="coloriautomatici" Type="System.String" Scope="User">
       <Value Profile="(Default)">si</Value>
     </Setting>
+    <Setting Name="speedtest" Type="System.String" Scope="User">
+      <Value Profile="(Default)">http://10.111.253.2/</Value>
+    </Setting>
+    <Setting Name="Impostazione" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>
