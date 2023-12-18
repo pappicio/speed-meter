@@ -542,7 +542,7 @@ Public Class speedmeter
 
         ''  If IO.File.Exists(Application.StartupPath & "\speed-meter.cfg") Then
         Dim TmpScrn As Screen = Screen.FromControl(Me)
-            Dim size As Rectangle = TmpScrn.Bounds
+        Dim size As Rectangle = TmpScrn.Bounds
         ''  If IO.File.GetLastWriteTime(Application.StartupPath & "\speed-meter.cfg") <> lastedit Or sizeold <> size Then
 
         ''caricaconfig()
@@ -1228,6 +1228,25 @@ ByVal dwReserved As Int32) As Boolean
         ritorna = True
         MsgBox("Speed-Meter Version 3.8. Developed by DI RESTA Giuseppe!")
         ritorna = False
+    End Sub
+
+    Private Sub CambiaLinkSpeedTestToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CambiaLinkSpeedTestToolStripMenuItem.Click
+        ritorna = True
+        Dim StatusDate = InputBox("Inserisci il nuovo link per eddettuare lo SpeedTest (esempio: speedtest.net)", "Modifica link Speedtest", My.Settings.speedtest)
+        If StatusDate.Trim = "" Then
+            ritorna = False
+            Exit Sub
+        End If
+        If StatusDate.ToLower.Trim.StartsWith("http") = False Then
+            StatusDate = "http://" & StatusDate
+        End If
+        ritorna = False
+        My.Settings.speedtest = StatusDate
+        My.Settings.Save()
+    End Sub
+
+    Private Sub SpeedTestToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SpeedTestToolStripMenuItem.Click
+        Process.Start("microsoft-edge:" & My.Settings.speedtest)
     End Sub
 End Class
 
