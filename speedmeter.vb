@@ -1229,7 +1229,9 @@ ByVal dwReserved As Int32) As Boolean
 
     Private Sub AboutToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AboutToolStripMenuItem.Click
         ritorna = True
-        MsgBox("Speed-Meter Version 4.0. Developed by DI RESTA Giuseppe!")
+        Dim myFileVersionInfo = FileVersionInfo.GetVersionInfo(Application.ExecutablePath)
+
+        MsgBox("Speed-Meter Version: " & myFileVersionInfo.FileMajorPart.ToString & "." & myFileVersionInfo.FileMinorPart.ToString & " - Developed by DI RESTA Giuseppe!")
         ritorna = False
     End Sub
 
