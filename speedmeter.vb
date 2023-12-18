@@ -853,7 +853,7 @@ ByVal dwReserved As Int32) As Boolean
     End Sub
 
     Private Sub Label1_Click(sender As Object, e As EventArgs) Handles Label1.Click
-        cambiagiu()
+
     End Sub
 
     Private Sub SelezionaCororeTestoToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SelezionaCororeTestoToolStripMenuItem.Click
@@ -1258,6 +1258,10 @@ ByVal dwReserved As Int32) As Boolean
 
     Private Sub SpeedTestToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SpeedTestToolStripMenuItem.Click
         Process.Start("microsoft-edge:" & My.Settings.speedtest)
+    End Sub
+
+    Private Sub Label2_Click(sender As Object, e As EventArgs) Handles Label2.Click
+
     End Sub
 End Class
 
