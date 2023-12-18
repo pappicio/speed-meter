@@ -18,4 +18,4 @@ V 3.8; Aggiunte voci nel menu; Blocca Posizione a DX (cosi sara sempre li...) e 
 aggiunta voce menu "about"...
 rimosso file .cfg, inutile allo stato attuale!
 
-V 3.9; Aggiunto menu per lo speedtest (configurabile!)
+V 3.9 / 4.0 ; Aggiunto menu per lo speedtest (configurabile!)
