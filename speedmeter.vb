@@ -1229,7 +1229,7 @@ ByVal dwReserved As Int32) As Boolean
 
     Private Sub AboutToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AboutToolStripMenuItem.Click
         ritorna = True
-        MsgBox("Speed-Meter Version 3.8. Developed by DI RESTA Giuseppe!")
+        MsgBox("Speed-Meter Version 4.0. Developed by DI RESTA Giuseppe!")
         ritorna = False
     End Sub
 
