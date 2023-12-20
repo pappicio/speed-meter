@@ -972,7 +972,7 @@ ByVal dwReserved As Int32) As Boolean
             mousePos.Offset(mouseOffset.X, mouseOffset.Y)
             Me.Left = mousePos.X
             If Me.Left < TaskBarRect(0).Left Then
-                Me.Left = TaskBarRect(0).Left
+                ''Me.Left = TaskBarRect(0).Left
             End If
 
             If Me.Left > rectWindow.Left - Me.Width Then
