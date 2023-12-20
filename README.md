@@ -17,7 +17,3 @@ V 3.7; ora in automatico riconosce il colore della taskbar, quindi su tonalità 
 V 3.8; Aggiunte voci nel menu; Blocca Posizione a DX (cosi sara sempre li...) e Colori Automatici (senza sceglierli, sempre nero o bianco a seconda del colore della taskbar!)
 aggiunta voce menu "about"...
 rimosso file .cfg, inutile allo stato attuale!
-
-V 3.9; Aggiunto menu per lo speedtest (configurabile!)
-
-V 4.0; risolto un bug sulla colorazione freccia Download.

@@ -157,10 +157,7 @@ Public Class speedmeter
         Return GetPixel(GetWindowDC(GetDesktopWindow), x, y)
     End Function
 
-
-
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
 
         IsAdministrator = New WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator)
         If IsAdministrator Then
@@ -582,7 +579,9 @@ Public Class speedmeter
 
     Public net As NetworkInterface
 
-    Public Function BytesConverter(ByVal bytes As Long) As String
+    Dim maxd, maxu As Double
+    Dim band As String = "Mb"
+    Public Function BytesConverter(ByVal bytes As Long, Optional download As Boolean = True) As String
         Dim divisore As Integer = 1
         Dim banda As Double = bytes / 1024 / 1024
         Select Case bandwidth.Trim
@@ -602,7 +601,12 @@ Public Class speedmeter
 
         Dim ret As String = "0 Mb"
         ret = (banda * divisore).ToString("000.00") & " " & bandwidth.Trim
-
+        If download Then
+            maxd = (banda * divisore).ToString("000.00")
+        Else
+            maxu = (banda * divisore).ToString("000.00")
+        End If
+        band = bandwidth.Trim
 
         Return ret.ToString
     End Function
@@ -744,6 +748,8 @@ ByVal dwReserved As Int32) As Boolean
             Throw
         End Try
     End Sub
+
+    Dim maxup, maxdown As Double
     Private Sub BandSec()
         If net Is Nothing Then
             Exit Sub
@@ -768,11 +774,21 @@ ByVal dwReserved As Int32) As Boolean
             Try
 
                 Label1.Text = " " & BytesConverter(If(Down < 0, 0, Down)) & "/s"
-                Label2.Text = " " & BytesConverter(If(Up < 0, 0, Up)) & "/s"
+                Label2.Text = " " & BytesConverter(If(Up < 0, 0, Up), False) & "/s"
 
                 Label1.Text = Label1.Text.Replace(",", ".")
                 Label2.Text = Label2.Text.Replace(",", ".")
 
+                If maxdown < maxd Then
+                    maxdown = maxd
+                    DownloadToolStripMenuItem.Text = "Download: " & maxd & " " & band & "/s"
+                End If
+
+
+                If maxup < maxu Then
+                    maxup = maxu
+                    UploadToolStripMenuItem.Text = "Upload: " & maxu & " " & band & "/s"
+                End If
 
 
                 PictureBox1.Top = 10
@@ -853,7 +869,7 @@ ByVal dwReserved As Int32) As Boolean
     End Sub
 
     Private Sub Label1_Click(sender As Object, e As EventArgs) Handles Label1.Click
-
+        cambiagiu()
     End Sub
 
     Private Sub SelezionaCororeTestoToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SelezionaCororeTestoToolStripMenuItem.Click
@@ -972,7 +988,7 @@ ByVal dwReserved As Int32) As Boolean
             mousePos.Offset(mouseOffset.X, mouseOffset.Y)
             Me.Left = mousePos.X
             If Me.Left < TaskBarRect(0).Left Then
-                ''Me.Left = TaskBarRect(0).Left
+                '  Me.Left = TaskBarRect(0).Left
             End If
 
             If Me.Left > rectWindow.Left - Me.Width Then
@@ -1229,22 +1245,25 @@ ByVal dwReserved As Int32) As Boolean
 
     Private Sub AboutToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AboutToolStripMenuItem.Click
         ritorna = True
-        Dim myFileVersionInfo = FileVersionInfo.GetVersionInfo(Application.ExecutablePath)
-
-        MsgBox("Speed-Meter Version: " & myFileVersionInfo.FileMajorPart.ToString & "." & myFileVersionInfo.FileMinorPart.ToString & " - Developed by DI RESTA Giuseppe!")
+        MsgBox("Speed-Meter Version 3.8. Developed by DI RESTA Giuseppe!")
         ritorna = False
+    End Sub
+
+    Private Sub DownloadToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DownloadToolStripMenuItem.Click
+
+    End Sub
+
+    Private Sub ResettaStatisticheToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ResettaStatisticheToolStripMenuItem.Click
+        maxdown = 0
+        maxup = 0
+    End Sub
+
+    Private Sub UploadToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UploadToolStripMenuItem.Click
+
     End Sub
 
     Private Sub CambiaLinkSpeedTestToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CambiaLinkSpeedTestToolStripMenuItem.Click
         ritorna = True
-
-        Dim x = MsgBox("Cambiare sito per efettuare lo Speed Test?" & vbCr & vbCr &
-                           "Vuoi continuare?", vbYesNo)
-        If x = vbNo Then
-            ritorna = False
-            Exit Sub
-        End If
-
         Dim StatusDate = InputBox("Inserisci il nuovo link per eddettuare lo SpeedTest (esempio: speedtest.net)", "Modifica link Speedtest", My.Settings.speedtest)
         If StatusDate.Trim = "" Then
             ritorna = False
@@ -1260,10 +1279,6 @@ ByVal dwReserved As Int32) As Boolean
 
     Private Sub SpeedTestToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SpeedTestToolStripMenuItem.Click
         Process.Start("microsoft-edge:" & My.Settings.speedtest)
-    End Sub
-
-    Private Sub Label2_Click(sender As Object, e As EventArgs) Handles Label2.Click
-
     End Sub
 End Class
 
