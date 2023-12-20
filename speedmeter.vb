@@ -1264,6 +1264,14 @@ ByVal dwReserved As Int32) As Boolean
 
     End Sub
 
+    Private Sub ToolStripSeparator14_Click(sender As Object, e As EventArgs) Handles ToolStripSeparator14.Click
+
+    End Sub
+
+    Private Sub EffettuaUnoSpeedTestToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles EffettuaUnoSpeedTestToolStripMenuItem.Click
+        Process.Start("microsoft-edge:" & My.Settings.speedtest)
+    End Sub
+
     Private Sub CambiaLinkSpeedTestToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CambiaLinkSpeedTestToolStripMenuItem.Click
         ritorna = True
         Dim StatusDate = InputBox("Inserisci il nuovo link per eddettuare lo SpeedTest (esempio: speedtest.net)", "Modifica link Speedtest", My.Settings.speedtest)
@@ -1280,7 +1288,7 @@ ByVal dwReserved As Int32) As Boolean
     End Sub
 
     Private Sub SpeedTestToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SpeedTestToolStripMenuItem.Click
-        Process.Start("microsoft-edge:" & My.Settings.speedtest)
+
     End Sub
 End Class
 
