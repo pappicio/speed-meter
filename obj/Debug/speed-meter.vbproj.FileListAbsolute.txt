@@ -10,3 +10,7 @@ D:\speed-meter\speed-meter\obj\Debug\speed-meter.exe
 D:\speed-meter\speed-meter\obj\Debug\speed-meter.xml
 D:\speed-meter\speed-meter\obj\Debug\speed-meter.pdb
 D:\speed-meter\speed-meter\obj\Debug\speed-meter.vbproj.AssemblyReference.cache
+c:\temp\speed-meter.exe.config
+c:\temp\speed-meter.exe
+c:\temp\speed-meter.pdb
+c:\temp\speed-meter.xml
