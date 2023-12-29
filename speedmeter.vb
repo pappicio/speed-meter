@@ -751,35 +751,47 @@ ByVal dwReserved As Int32) As Boolean
 
     Dim maxup, maxdown As Double
     Private Sub BandSec()
-        If net Is Nothing Then
-            Exit Sub
+
+        Dim Up, down
+
+        If Not net Is Nothing Then
+            Try
+                Dim NicStats As IPv4InterfaceStatistics = net.GetIPv4Statistics
+                If LastUpload = -1 Then
+                    LastUpload = NicStats.BytesSent
+                End If
+
+                If LastDownload = -1 Then
+                    LastDownload = NicStats.BytesReceived
+                End If
+
+
+                Up = NicStats.BytesSent - LastUpload
+                down = NicStats.BytesReceived - LastDownload
+
+                LastUpload = NicStats.BytesSent
+                LastDownload = NicStats.BytesReceived
+
+
+            Catch ex As Exception
+
+            End Try
+
+
+            Label1.Text = " " & BytesConverter(If(down < 0, 0, down)) & "/s"
+            Label2.Text = " " & BytesConverter(If(Up < 0, 0, Up), False) & "/s"
+
+            Label1.Text = Label1.Text.Replace(",", ".")
+            Label2.Text = Label2.Text.Replace(",", ".")
+        Else
+            Label1.Text = " OFF LINE"
+            Label2.Text = " "
+
         End If
+
         Try
 
-            Dim NicStats As IPv4InterfaceStatistics = net.GetIPv4Statistics
-            If LastUpload = -1 Then
-                LastUpload = NicStats.BytesSent
-            End If
-
-            If LastDownload = -1 Then
-                LastDownload = NicStats.BytesReceived
-            End If
-
-
-            Dim Up = NicStats.BytesSent - LastUpload
-            Dim Down = NicStats.BytesReceived - LastDownload
-
-            LastUpload = NicStats.BytesSent
-            LastDownload = NicStats.BytesReceived
-            Try
-
-                Label1.Text = " " & BytesConverter(If(Down < 0, 0, Down)) & "/s"
-                Label2.Text = " " & BytesConverter(If(Up < 0, 0, Up), False) & "/s"
-
-                Label1.Text = Label1.Text.Replace(",", ".")
-                Label2.Text = Label2.Text.Replace(",", ".")
-
-                If maxdown < maxd Then
+            If maxdown < maxd Then
                     maxdown = maxd
                     DownloadToolStripMenuItem.Text = "Download: " & maxd & " " & band & "/s"
                 End If
@@ -862,9 +874,9 @@ ByVal dwReserved As Int32) As Boolean
 
 
 
-        Catch ex As Exception
+        ' Catch ex As Exception
 
-        End Try
+        ' End Try
 
     End Sub
 
