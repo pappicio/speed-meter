@@ -267,7 +267,8 @@ Public Class speedmeter
         posiziona()
 
 
-
+        Timer1.Enabled = True
+        Timer2.Enabled = True
 
         Timer2_Tick(Nothing, Nothing)
     End Sub
@@ -453,25 +454,30 @@ Public Class speedmeter
     End Sub
 
     Sub posiziona()
-        If bloccaposizione = False Then
-            If posizione <> -1 Then
-                Me.Left = posizione
-            ElseIf My.Settings.posizione <> -1 Then
-                Me.Left = My.Settings.posizione
+        Try
+            If bloccaposizione = False Then
+                If posizione <> -1 Then
+                    Me.Left = posizione
+                ElseIf My.Settings.posizione <> -1 Then
+                    Me.Left = My.Settings.posizione
+                End If
+            Else
+                Me.Left = rectWindow.Left - Me.Width
             End If
-        Else
-            Me.Left = rectWindow.Left - Me.Width
-        End If
-        If bloccaposizione Then
-            Me.Left = rectWindow.Left - Me.Width
-        End If
+            If bloccaposizione Then
+                Me.Left = rectWindow.Left - Me.Width
+            End If
 
-        Me.Height = TaskBarRect(0).Height - 1
-        Dim mezzo As Integer = Me.Height / 2
-        Label1.Left = PictureBox2.Width
-        Label2.Left = PictureBox3.Width
-        Me.Label1.Top = mezzo - Label1.Height - 1 '+1
-        Me.Label2.Top = mezzo + 1 '- 1
+            Me.Height = TaskBarRect(0).Height - 1
+            Dim mezzo As Integer = Me.Height / 2
+            Label1.Left = PictureBox2.Width
+            Label2.Left = PictureBox3.Width
+            Me.Label1.Top = mezzo - Label1.Height - 1 '+1
+            Me.Label2.Top = mezzo + 1 '- 1
+
+        Catch ex As Exception
+
+        End Try
 
 
     End Sub
@@ -677,6 +683,7 @@ ByVal dwReserved As Int32) As Boolean
         Catch ex As Exception
 
         End Try
+
         Try
             Dim Adapters As NetworkInterface() = NetworkInterface.GetAllNetworkInterfaces()
             Dim ce As Boolean = False
@@ -745,7 +752,7 @@ ByVal dwReserved As Int32) As Boolean
 
 
         Catch exception As System.Exception
-            Throw
+
         End Try
     End Sub
 
