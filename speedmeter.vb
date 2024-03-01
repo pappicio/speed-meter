@@ -692,8 +692,6 @@ ByVal dwReserved As Int32) As Boolean
                 If network.OperationalStatus = 1 Then
 
                     If GetLocalIPAddress() <> "" And (network.NetworkInterfaceType = 6 Or network.NetworkInterfaceType = 71) Then
-                        Dim ip = network.GetIPProperties().UnicastAddresses(1).Address.ToString
-
                         conta = conta + 1
                         menu2 = New ToolStripMenuItem With {.Text = network.Description, .Name = CStr(conta), .Tag = network}
                         'We have a reference to menu1 already, but here's how you can find the menu item by name...
