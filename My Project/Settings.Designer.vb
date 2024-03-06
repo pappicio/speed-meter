@@ -59,17 +59,7 @@ Namespace My
          Global.System.Configuration.DefaultSettingValueAttribute("-1")>  _
         Public Property posizione() As Integer
             Get
-
-                Try
-                    Return CType(Me("posizione"), Integer)
-                Catch ex As Exception
-                    Try
-                        IO.Directory.Delete((Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)) & "\AppData\Local\speed-meter", True)
-                    Catch ex2 As Exception
-
-                    End Try
-                End Try
-
+                Return CType(Me("posizione"),Integer)
             End Get
             Set
                 Me("posizione") = value
