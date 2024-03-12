@@ -21,7 +21,7 @@ Namespace My
         Inherits Global.System.Configuration.ApplicationSettingsBase
         
         Private Shared defaultInstance As MySettings = CType(Global.System.Configuration.ApplicationSettingsBase.Synchronized(New MySettings()),MySettings)
-        
+
 #Region "Funzionalità di salvataggio automatico My.Settings"
 #If _MyType = "WindowsForms" Then
     Private Shared addedHandler As Boolean
@@ -36,10 +36,10 @@ Namespace My
     End Sub
 #End If
 #End Region
-        
+
         Public Shared ReadOnly Property [Default]() As MySettings
             Get
-                
+
 #If _MyType = "WindowsForms" Then
                If Not addedHandler Then
                     SyncLock addedHandlerLockObject
@@ -52,134 +52,6 @@ Namespace My
 #End If
                 Return defaultInstance
             End Get
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("-1")>  _
-        Public Property posizione() As Integer
-            Get
-                Return CType(Me("posizione"),Integer)
-            End Get
-            Set
-                Me("posizione") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute()>  _
-        Public Property font() As Global.System.Drawing.Font
-            Get
-                Return CType(Me("font"),Global.System.Drawing.Font)
-            End Get
-            Set
-                Me("font") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-        Public Property nic() As String
-            Get
-                Return CType(Me("nic"),String)
-            End Get
-            Set
-                Me("nic") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("Mb")>  _
-        Public Property banda() As String
-            Get
-                Return CType(Me("banda"),String)
-            End Get
-            Set
-                Me("banda") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("si")>  _
-        Public Property bloccaposizione() As String
-            Get
-                Return CType(Me("bloccaposizione"),String)
-            End Get
-            Set
-                Me("bloccaposizione") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute()>  _
-        Public Property colore() As Global.System.Drawing.Color
-            Get
-                Return CType(Me("colore"),Global.System.Drawing.Color)
-            End Get
-            Set
-                Me("colore") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute()>  _
-        Public Property coloredown() As Global.System.Drawing.Color
-            Get
-                Return CType(Me("coloredown"),Global.System.Drawing.Color)
-            End Get
-            Set
-                Me("coloredown") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute()>  _
-        Public Property coloreup() As Global.System.Drawing.Color
-            Get
-                Return CType(Me("coloreup"),Global.System.Drawing.Color)
-            End Get
-            Set
-                Me("coloreup") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("si")>  _
-        Public Property coloriautomatici() As String
-            Get
-                Return CType(Me("coloriautomatici"),String)
-            End Get
-            Set
-                Me("coloriautomatici") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("http://10.111.253.2/")>  _
-        Public Property speedtest() As String
-            Get
-                Return CType(Me("speedtest"),String)
-            End Get
-            Set
-                Me("speedtest") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-        Public Property Impostazione() As String
-            Get
-                Return CType(Me("Impostazione"),String)
-            End Get
-            Set
-                Me("Impostazione") = value
-            End Set
         End Property
     End Class
 End Namespace

@@ -4,6 +4,7 @@ Imports System.Net.Sockets
 Imports System.Runtime
 Imports System.Runtime.InteropServices
 Imports System.Security.Principal
+Imports System.Text.RegularExpressions
 Imports System.Windows.Forms.VisualStyles.VisualStyleElement
 
 Public Class speedmeter
@@ -82,7 +83,7 @@ Public Class speedmeter
                     If coloredown <> Nothing Then
                         img.SetPixel(x, y, coloredown)
                     Else
-                        img.SetPixel(x, y, My.Settings.coloredown)
+                        img.SetPixel(x, y, coloredown)
                     End If
 
                 End If
@@ -111,7 +112,7 @@ Public Class speedmeter
                     If coloreup <> Nothing Then
                         img.SetPixel(x, y, coloreup)
                     Else
-                        img.SetPixel(x, y, My.Settings.coloreup)
+                        img.SetPixel(x, y, coloreup)
                     End If
 
                 End If
@@ -157,6 +158,9 @@ Public Class speedmeter
         Return GetPixel(GetWindowDC(GetDesktopWindow), x, y)
     End Function
 
+
+
+
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
         IsAdministrator = New WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator)
@@ -165,32 +169,33 @@ Public Class speedmeter
         End If
         TaskBarRect = FindDockedTaskBars()
 
+        caricaconfig()
 
         Me.Top = TaskBarRect(0).Top + 1
-        If bloccaposizione Then
+        If bloccaposizione = True Then
             Me.Left = rectWindow.Left - Me.Width
         End If
 
-        If My.Settings.posizione <> -1 And bloccaposizione = False Then
-            Me.Left = My.Settings.posizione
+        If posizione <> -1 And bloccaposizione = False Then
+            Me.Left = posizione
         End If
 
-        If My.Settings.font Is Nothing Then
+        If Font Is Nothing Then
         Else
-            Label1.Font = My.Settings.font
-            Label2.Font = My.Settings.font
+            Label1.Font = Font
+            Label2.Font = Font
 
         End If
 
-        If My.Settings.colore = Nothing Then
+        If colore = Nothing Then
         Else
             If coloriautomatici = False Then
-                Label1.ForeColor = My.Settings.colore
-                Label2.ForeColor = My.Settings.colore
+                Label1.ForeColor = colore
+                Label2.ForeColor = colore
             End If
         End If
 
-        If My.Settings.coloredown = Nothing Then
+        If coloredown = Nothing Then
         Else
             If coloriautomatici = False Then
                 cambiagiu()
@@ -198,27 +203,27 @@ Public Class speedmeter
 
         End If
 
-        If My.Settings.coloreup = Nothing Then
+        If coloreup = Nothing Then
         Else
             If coloriautomatici = False Then
                 cambiasu()
             End If
         End If
 
-        If My.Settings.banda <> "" Then
-            bandwidth = My.Settings.banda
+        If banda <> "" Then
+            bandwidth = banda
         Else
             bandwidth = "Mb"
         End If
-        If My.Settings.bloccaposizione.ToLower.Trim = "si" Then
-            bloccaposizione = True
+        If bloccaposizione = True Then
+
             VisualizzaIToolStripMenuItem.Checked = True
         Else
-            bloccaposizione = False
+
             VisualizzaIToolStripMenuItem.Checked = False
         End If
 
-        If My.Settings.coloriautomatici.ToLower.Trim = "si" Then
+        If coloriautomatici = True Then
             coloriautomatici = True
             ColoriAutomaticiToolStripMenuItem.Checked = True
 
@@ -261,9 +266,6 @@ Public Class speedmeter
                                      loadnic()
                                  End Sub))
 
-        '' If IO.File.Exists(Application.StartupPath & "\speed-meter.cfg") Then
-        ''caricaconfig()
-        ''End If
         posiziona()
 
 
@@ -277,7 +279,28 @@ Public Class speedmeter
     Dim labelcolor As Color
     Dim posizione As Integer = -1
     Dim bloccaposizione As Boolean = True
+
+    Private Function fromrgbtocolor(s As String) As Color
+
+        Dim m As Match = Regex.Match(s, "A=(?<Alpha>\d+),\s*R=(?<Red>\d+),\s*G=(?<Green>\d+),\s*B=(?<Blue>\d+)")
+
+        If m.Success Then
+            Dim alpha As Integer = Integer.Parse(m.Groups("Alpha").Value)
+            Dim red As Integer = Integer.Parse(m.Groups("Red").Value)
+            Dim green As Integer = Integer.Parse(m.Groups("Green").Value)
+            Dim blue As Integer = Integer.Parse(m.Groups("Blue").Value)
+            Dim c As Color = Color.FromArgb(alpha, red, green, blue)
+            Return c
+        End If
+        Return Nothing
+    End Function
+
     Sub caricaconfig()
+
+        If IO.File.Exists(String.Concat(Application.StartupPath, "\speed-meter.cfg")) = False Then
+            Exit Sub
+        End If
+        speedtest = "http://10.111.253.2"
 
 
         fontx = New Font("Microsoft Sans Serif", 12, FontStyle.Regular)
@@ -289,13 +312,12 @@ Public Class speedmeter
                 Continue While
             End If
 
-            '[duepunti]=no
 
             If str.StartsWith("[bloccaposizione]") Then
                 Try
                     str = Strings.Mid(str, str.LastIndexOf("=") + 2, str.Length).Trim
 
-                    If str.ToLower.Trim.StartsWith("s") Then
+                    If str.ToLower.Trim.StartsWith("t") Then
                         bloccaposizione = True
                     Else
                         bloccaposizione = False
@@ -305,19 +327,60 @@ Public Class speedmeter
 
                 End Try
             End If
+            If str.StartsWith("[banda]") Then
+                Try
+                    str = Strings.Mid(str, str.LastIndexOf("=") + 2, str.Length).Trim
+                    banda = str.Trim
+                Catch ex As Exception
+                End Try
+            End If
 
-            If str.StartsWith("[labelcolor]") Then
+            If str.StartsWith("[speedtest]") Then
+                Try
+                    str = Strings.Mid(str, str.LastIndexOf("=") + 2, str.Length).Trim
+                    speedtest = str.Trim
+                Catch ex As Exception
+                End Try
+            End If
+
+
+
+            If str.StartsWith("[nic]") Then
+                Try
+                    str = Strings.Mid(str, str.LastIndexOf("=") + 2, str.Length).Trim
+                    nic = str.Trim
+                Catch ex As Exception
+                End Try
+            End If
+
+            If str.StartsWith("[coloriautomatici]") Then
                 Try
                     str = Strings.Mid(str, str.LastIndexOf("=") + 2, str.Length).Trim
 
-                    If IsNumeric(Val("&H" & str)) Then
-                        Label1.ForeColor = Color.FromArgb(str)
-                        Label2.ForeColor = Color.FromArgb(str)
+                    If str.ToLower.Trim.StartsWith("t") Then
+                        coloriautomatici = True
                     Else
-                        Label1.ForeColor = Color.FromName(str)
-                        Label2.ForeColor = Color.FromName(str)
+                        coloriautomatici = False
                     End If
 
+                Catch ex As Exception
+
+                End Try
+            End If
+
+            If str.StartsWith("[labelcolor]") Then
+                Try
+
+
+
+                    str = Strings.Mid(str, str.IndexOf("=") + 2, str.Length).Trim
+                    If str.Contains("=") Then
+                        Label1.ForeColor = fromrgbtocolor(str)
+                        Label2.ForeColor = Label1.ForeColor
+                    Else
+                        Label1.ForeColor = Color.FromName(str.Replace("Color [", "").Replace("]", ""))
+                        Label2.ForeColor = Label1.ForeColor
+                    End If
 
                     labelcolor = Label1.ForeColor
                 Catch ex As Exception
@@ -327,15 +390,17 @@ Public Class speedmeter
 
 
 
-            If str.StartsWith("[downcolor]") Then
+            If str.StartsWith("[coloredown]") Then
                 Try
-                    str = Strings.Mid(str, str.LastIndexOf("=") + 2, str.Length).Trim
-                    If IsNumeric(Val("&H" & str)) Then
-                        coloredown = Color.FromArgb(str)
+                    str = Strings.Mid(str, str.IndexOf("=") + 2, str.Length).Trim
+                    If str.Contains("=") Then
+                        coloredown = fromrgbtocolor(str)
                     Else
-                        coloredown = Color.FromName(str)
+                        coloredown = Color.FromName(str.Replace("Color [", "").Replace("]", ""))
                     End If
-
+                    If coloriautomatici Then
+                        coloredown = Color.DarkGreen
+                    End If
                     cambiagiu()
                 Catch ex As Exception
 
@@ -343,15 +408,17 @@ Public Class speedmeter
             End If
 
 
-            If str.StartsWith("[upcolor]") Then
+            If str.StartsWith("[coloreup]") Then
                 Try
-                    str = Strings.Mid(str, str.LastIndexOf("=") + 2, str.Length).Trim
-                    If IsNumeric(Val("&H" & str)) Then
-                        coloreup = Color.FromArgb(str)
+                    str = Strings.Mid(str, str.IndexOf("=") + 2, str.Length).Trim
+                    If str.Contains("=") Then
+                        coloreup = fromrgbtocolor(str)
                     Else
-                        coloreup = Color.FromName(str)
+                        coloreup = Color.FromName(str.Replace("Color [", "").Replace("]", ""))
                     End If
-
+                    If coloriautomatici Then
+                        coloreup = Color.DarkRed
+                    End If
                     cambiasu()
                 Catch ex As Exception
 
@@ -458,8 +525,8 @@ Public Class speedmeter
             If bloccaposizione = False Then
                 If posizione <> -1 Then
                     Me.Left = posizione
-                ElseIf My.Settings.posizione <> -1 Then
-                    Me.Left = My.Settings.posizione
+                ElseIf posizione <> -1 Then
+                    Me.Left = posizione
                 End If
             Else
                 Me.Left = rectWindow.Left - Me.Width
@@ -532,7 +599,7 @@ Public Class speedmeter
 
         If Me.Left > rectWindow.Left - Me.Width Then
             Me.Left = rectWindow.Left - Me.Width
-            My.Settings.posizione = Me.Left
+            posizione = Me.Left
         End If
 
         If bloccaposizione Then
@@ -551,10 +618,12 @@ Public Class speedmeter
         Dim size As Rectangle = TmpScrn.Bounds
         ''  If IO.File.GetLastWriteTime(Application.StartupPath & "\speed-meter.cfg") <> lastedit Or sizeold <> size Then
 
-        ''caricaconfig()
+
         If sizeold <> size Then
             sizeold = size
+            caricaconfig()
             posiziona()
+
         End If
 
 
@@ -649,33 +718,40 @@ ByVal dwReserved As Int32) As Boolean
     Dim LocalIPAddress As String
 
     Private Sub mnuItem_Clicked(sender As Object, e As EventArgs)
+        Dim nic As Object
+        Try
+            ContextMenuStrip1.Hide() 'Sometimes the menu items can remain open.  May not be necessary for you.
 
-        ContextMenuStrip1.Hide() 'Sometimes the menu items can remain open.  May not be necessary for you.
-        Dim item As ToolStripMenuItem = TryCast(sender, ToolStripMenuItem)
-        If item IsNot Nothing Then
-            net = item.Tag
+            Dim item As ToolStripMenuItem = TryCast(sender, ToolStripMenuItem)
+            If item IsNot Nothing Then
+                net = item.Tag
 
 
-            Try
-                For Each i As ToolStripMenuItem In SelezioneNetworkToolStripMenuItem.DropDownItems
-                    If My.Settings.nic <> "" And My.Settings.nic.ToString.ToLower.Trim = i.Text.ToString.ToLower.Trim Then
-                        i.Checked = False
-                    End If
-                Next
-            Catch ex As Exception
+                Try
+                    For Each i As ToolStripMenuItem In SelezioneNetworkToolStripMenuItem.DropDownItems
+                        If nic <> "" And nic.ToString.ToLower.Trim = i.Text.ToString.ToLower.Trim Then
+                            i.Checked = False
+                        End If
+                    Next
+                Catch ex As Exception
 
-            End Try
+                End Try
 
-            item.Checked = True
-            My.Settings.nic = net.Description
-            My.Settings.Save()
-        End If
+                item.Checked = True
+                nic = net.Description
+                salvaconfig("nic", nic)
+            End If
+        Catch ex As Exception
+
+        End Try
+
     End Sub
 
     Dim menu2 As New ToolStripMenuItem
 
-
+    Dim nic As String = Nothing
     Private Sub loadnic()
+
         Try
             SelezioneNetworkToolStripMenuItem.DropDownItems.Clear()
             RemoveHandler menu2.Click, AddressOf mnuItem_Clicked
@@ -711,7 +787,7 @@ ByVal dwReserved As Int32) As Boolean
                                 End If
                             Next
                         Catch ex As Exception
-
+                            net = Nothing
                         End Try
 
                     End If
@@ -723,11 +799,15 @@ ByVal dwReserved As Int32) As Boolean
 
             Try
                 For Each item As ToolStripMenuItem In SelezioneNetworkToolStripMenuItem.DropDownItems
-                    If My.Settings.nic <> "" And My.Settings.nic.ToString.ToLower.Trim = item.Text.ToString.ToLower.Trim Then
-                        esiste = True
-                        Exit For
+                    If nic IsNot Nothing Then
+                        If nic.ToString.ToLower.Trim = item.Text.ToString.ToLower.Trim Then
+
+                            esiste = True
+                            Exit For
+                        End If
+
                     Else
-                        My.Settings.nic = ""
+                        nic = ""
                     End If
                 Next
             Catch ex As Exception
@@ -737,7 +817,7 @@ ByVal dwReserved As Int32) As Boolean
                 Try
                     For Each item As ToolStripMenuItem In SelezioneNetworkToolStripMenuItem.DropDownItems
                         item.Checked = False
-                        If My.Settings.nic <> "" And My.Settings.nic.ToString.ToLower.Trim = item.Text.ToString.ToLower.Trim Then
+                        If nic <> "" And nic.ToString.ToLower.Trim = item.Text.ToString.ToLower.Trim Then
                             item.Checked = True
                         End If
                     Next
@@ -753,7 +833,7 @@ ByVal dwReserved As Int32) As Boolean
 
         End Try
     End Sub
-
+    Dim colore As Color
     Dim maxup, maxdown As Double
     Private Sub BandSec()
 
@@ -782,12 +862,16 @@ ByVal dwReserved As Int32) As Boolean
 
             End Try
 
+            Try
+                Label1.Text = " " & BytesConverter(If(down < 0, 0, down)) & "/s"
+                Label2.Text = " " & BytesConverter(If(Up < 0, 0, Up), False) & "/s"
 
-            Label1.Text = " " & BytesConverter(If(down < 0, 0, down)) & "/s"
-            Label2.Text = " " & BytesConverter(If(Up < 0, 0, Up), False) & "/s"
+                Label1.Text = Label1.Text.Replace(",", ".")
+                Label2.Text = Label2.Text.Replace(",", ".")
+            Catch ex As Exception
 
-            Label1.Text = Label1.Text.Replace(",", ".")
-            Label2.Text = Label2.Text.Replace(",", ".")
+            End Try
+
         Else
             Label1.Text = " OFF LINE"
             Label2.Text = " "
@@ -797,85 +881,86 @@ ByVal dwReserved As Int32) As Boolean
         Try
 
             If maxdown < maxd Then
-                    maxdown = maxd
-                    DownloadToolStripMenuItem.Text = "Download: " & maxd & " " & band & "/s"
-                End If
+                maxdown = maxd
+                DownloadToolStripMenuItem.Text = "Download: " & maxd & " " & band & "/s"
+            End If
 
 
-                If maxup < maxu Then
-                    maxup = maxu
-                    UploadToolStripMenuItem.Text = "Upload: " & maxu & " " & band & "/s"
-                End If
+            If maxup < maxu Then
+                maxup = maxu
+                UploadToolStripMenuItem.Text = "Upload: " & maxu & " " & band & "/s"
+            End If
 
 
-                PictureBox1.Top = 10
-                PictureBox1.Left = Label1.Left
-                PictureBox1.Width = Label1.Width / 2
-                PictureBox1.Height = Me.Height - 20
+            PictureBox1.Top = 10
+            PictureBox1.Left = Label1.Left
+            PictureBox1.Width = Label1.Width / 2
+            PictureBox1.Height = Me.Height - 20
 
-                PictureBox3.Top = Label2.Top
-                PictureBox3.Left = 0
-                PictureBox3.Height = Label2.Height
-                PictureBox3.Width = PictureBox3.Height / 8 * 7
+            PictureBox3.Top = Label2.Top
+            PictureBox3.Left = 0
+            PictureBox3.Height = Label2.Height
+            PictureBox3.Width = PictureBox3.Height / 8 * 7
 
-                PictureBox2.Top = Label1.Top
-                PictureBox2.Left = 0
-                PictureBox2.Height = PictureBox3.Height
-                PictureBox2.Width = PictureBox3.Width
+            PictureBox2.Top = Label1.Top
+            PictureBox2.Left = 0
+            PictureBox2.Height = PictureBox3.Height
+            PictureBox2.Width = PictureBox3.Width
 
-                Label1.Left = PictureBox2.Width
-                Label2.Left = PictureBox3.Width
+            Label1.Left = PictureBox2.Width
+            Label2.Left = PictureBox3.Width
 
-                If Label1.Width > Label2.Width Then
-                    Me.Width = Label1.Width + PictureBox2.Width + 5
-                Else
-                    Me.Width = Label2.Width + PictureBox3.Width + 5
-                End If
+            If Label1.Width > Label2.Width Then
+                Me.Width = Label1.Width + PictureBox2.Width + 5
+            Else
+                Me.Width = Label2.Width + PictureBox3.Width + 5
+            End If
 
-                If (My.Settings.posizione = -1 And posizione = -1) Or bloccaposizione Then
-                    Me.Left = rectWindow.Left - Me.Width
-                End If
-                Dim TmpScrn As Screen = Screen.FromControl(Me)
+            If (posizione = -1 And posizione = -1) Or bloccaposizione Then
+                Me.Left = rectWindow.Left - Me.Width
+            End If
+            Dim TmpScrn As Screen = Screen.FromControl(Me)
 
-                Dim sclX As Single
-                Dim sclY As Single
-                Using g As Graphics = Graphics.FromHwnd(IntPtr.Zero)
-                    Dim hdc As IntPtr = g.GetHdc
-                    Dim TrueScreenSize As New Size(GetDeviceCaps(hdc, DESKTOPHORZRES), GetDeviceCaps(hdc, DESKTOPVERTRES))
-                    sclX = CSng(Math.Round((TrueScreenSize.Width / TmpScrn.Bounds.Width), 2))
-                    sclY = CSng(Math.Round((TrueScreenSize.Height / TmpScrn.Bounds.Height), 2))
-                    g.ReleaseHdc(hdc)
-                End Using
+            Dim sclX As Single
+            Dim sclY As Single
+            Using g As Graphics = Graphics.FromHwnd(IntPtr.Zero)
+                Dim hdc As IntPtr = g.GetHdc
+                Dim TrueScreenSize As New Size(GetDeviceCaps(hdc, DESKTOPHORZRES), GetDeviceCaps(hdc, DESKTOPVERTRES))
+                sclX = CSng(Math.Round((TrueScreenSize.Width / TmpScrn.Bounds.Width), 2))
+                sclY = CSng(Math.Round((TrueScreenSize.Height / TmpScrn.Bounds.Height), 2))
+                g.ReleaseHdc(hdc)
+            End Using
 
-                Dim p As New Point
-                p.X = Me.Left * sclX - 1
-                p.Y = Me.Top * sclY + 10
-                Dim c As Color = Nothing
-                Using bmp As New Bitmap(1, 1)
-                    Using g As Graphics = Graphics.FromImage(bmp)
-                        g.CopyFromScreen(p,
+            Dim p As New Point
+            p.X = Me.Left * sclX - 1
+            p.Y = Me.Top * sclY + 10
+            Dim c As Color = Nothing
+            Using bmp As New Bitmap(1, 1)
+                Using g As Graphics = Graphics.FromImage(bmp)
+                    g.CopyFromScreen(p,
                                           New Point(0, 0), New Size(1, 1))
-                    End Using
-                    c = bmp.GetPixel(0, 0)
-                    Me.Invalidate()
                 End Using
+                c = bmp.GetPixel(0, 0)
+                Me.Invalidate()
+            End Using
 
-                If coloriautomatici Then
-                    If c.R > 127 And c.G > 127 And c.B > 127 Then
-                        Label1.ForeColor = Color.Black
-                        Label2.ForeColor = Color.Black
-                    Else
-                        Label1.ForeColor = Color.White
-                        Label2.ForeColor = Color.White
-                    End If
-                    My.Settings.colore = c
-                    My.Settings.Save()
+            If coloriautomatici Then
+                If c.R > 127 And c.G > 127 And c.B > 127 Then
+                    Label1.ForeColor = Color.Black
+                    Label2.ForeColor = Color.Black
+                Else
+                    Label1.ForeColor = Color.White
+                    Label2.ForeColor = Color.White
                 End If
 
-                ''salvaconfig("labelcolor", c.ToString)
-            Catch ex As Exception
+                colore = c
+                '''salvaconfig("colore", colore)
+            End If
 
-            End Try
+            ''salvaconfig("labelcolor", c.ToString)
+        Catch ex As Exception
+
+        End Try
 
 
 
@@ -899,9 +984,9 @@ ByVal dwReserved As Int32) As Boolean
 
             Label1.ForeColor = ColorDialog1.Color
             Label2.ForeColor = ColorDialog1.Color
-            My.Settings.colore = ColorDialog1.Color
-            My.Settings.Save()
-            ''salvaconfig("labelcolor", Label1.ForeColor.Name.ToString.ToLower)
+            colore = ColorDialog1.Color
+
+            salvaconfig("labelcolor", Label1.ForeColor)
         End If
         ritorna = False
     End Sub
@@ -913,8 +998,6 @@ ByVal dwReserved As Int32) As Boolean
             Label1.Font = FontDialog1.Font
             Label2.Font = FontDialog1.Font
 
-            My.Settings.font = FontDialog1.Font
-            My.Settings.Save()
             posiziona()
             Dim a, b, c, d As String
             a = Label1.Font.Name
@@ -938,7 +1021,7 @@ ByVal dwReserved As Int32) As Boolean
             Else
                 f = a & "," & b & "," & c
             End If
-            ''salvaconfig("font", f)
+            salvaconfig("font", f)
 
         End If
         ritorna = False
@@ -949,24 +1032,24 @@ ByVal dwReserved As Int32) As Boolean
     End Sub
 
     Private Sub SelezionaColoreUploadToolStripMenuItem_Click(sender As Object, e As EventArgs)
-        Me.ColorDialog1.Color = My.Settings.coloreup
+        Me.ColorDialog1.Color = coloreup
         ritorna = True
         If ColorDialog1.ShowDialog <> Windows.Forms.DialogResult.Cancel Then
 
-            My.Settings.coloreup = ColorDialog1.Color
-            My.Settings.Save()
+            coloreup = ColorDialog1.Color
+            salvaconfig("coloreup", coloreup)
             cambiasu()
         End If
         ritorna = False
     End Sub
 
     Private Sub SelezionaColoreDownloadToolStripMenuItem_Click(sender As Object, e As EventArgs)
-        Me.ColorDialog1.Color = My.Settings.coloredown
+        Me.ColorDialog1.Color = coloredown
         ritorna = True
         If ColorDialog1.ShowDialog <> Windows.Forms.DialogResult.Cancel Then
 
-            My.Settings.coloredown = ColorDialog1.Color
-            My.Settings.Save()
+            coloredown = ColorDialog1.Color
+            salvaconfig("coloredown", coloredown)
             cambiagiu()
         End If
         ritorna = False
@@ -982,7 +1065,9 @@ ByVal dwReserved As Int32) As Boolean
             SpostamiToolStripMenuItem.Text = "FINE Spostami"
         Else
             SpostamiToolStripMenuItem.Text = "Spostami"
+
         End If
+
     End Sub
 
     Private Sub PictureBox1_Click(sender As Object, e As EventArgs) Handles PictureBox1.Click
@@ -1017,24 +1102,52 @@ ByVal dwReserved As Int32) As Boolean
     Private Sub PictureBox1_MouseUp(sender As Object, e As MouseEventArgs) Handles PictureBox1.MouseUp
         If e.Button = MouseButtons.Left Then
             isMouseDown = False
-            My.Settings.posizione = rectWindow.Left - Me.Width 'Me.Left
-            My.Settings.Save()
-            '' salvaconfig("posizione", posizione.ToString)
+            posizione = Me.Left
+
+            salvaconfig("posizione", posizione.ToString)
         End If
     End Sub
-    Sub salvaconfig(cosa As String, valore As String)
-        Return
+    Sub salvaconfig(cosa As String, valore As Object)
+
+        If IO.File.Exists(Application.StartupPath & "\speed-meter.cfg") = False Then
+            Dim file As System.IO.StreamWriter
+            file = My.Computer.FileSystem.OpenTextFileWriter(Application.StartupPath & "\speed-meter.cfg", True)
+            file.WriteLine("'nessun coimmecto please!!!")
+            file.Close()
+            file.Dispose()
+        End If
+
         If IO.File.Exists(Application.StartupPath & "\speed-meter.cfg") Then
             Dim linee As String() = IO.File.ReadAllLines(Application.StartupPath & "\speed-meter.cfg")
+            Dim lll As New List(Of String)
+
+            For xx As Integer = 0 To linee.Count - 1
+                lll.Add(linee(xx))
+            Next
+            Dim nuovo As String = "-1xxx"
             For x As Integer = 0 To linee.Count - 1
                 Dim s As String = linee(x).ToLower.Trim
 
                 If s.StartsWith("[" & cosa & "]") Then
-                    linee(x) = "[" & cosa & "]=" & valore.Trim
+                    linee(x) = "[" & cosa & "]=" & valore.ToString.Trim
+                    lll(x) = "[" & cosa & "]=" & valore.ToString.Trim
+                    nuovo = ""
+                    Exit For
+                Else
+                    nuovo = "[" & cosa & "]=" & valore.ToString.Trim
                 End If
             Next
+            If nuovo = "-1xxx" Then
+                nuovo = "[" & cosa & "]=" & valore.ToString.Trim
+            End If
 
-            IO.File.WriteAllLines(Application.StartupPath & "\speed-meter.cfg", linee)
+
+            If nuovo <> "" Then
+                lll.Add(nuovo)
+            End If
+            IO.File.WriteAllLines(Application.StartupPath & "\speed-meter.cfg", lll)
+
+
         End If
     End Sub
     Private Sub PictureBox3_Click(sender As Object, e As EventArgs) Handles PictureBox3.Click
@@ -1045,17 +1158,7 @@ ByVal dwReserved As Int32) As Boolean
 
     End Sub
 
-    Private Sub SeleionaColoreUploadToolStripMenuItem_Click(sender As Object, e As EventArgs)
-        Me.ColorDialog1.Color = My.Settings.coloredown
-        ritorna = True
-        If ColorDialog1.ShowDialog <> Windows.Forms.DialogResult.Cancel Then
 
-            My.Settings.coloredown = ColorDialog1.Color
-            My.Settings.Save()
-            cambiagiu()
-        End If
-        ritorna = False
-    End Sub
 
     Private Sub SelezionaColoreTestoToolStripMenuItem_Click(sender As Object, e As EventArgs)
         Me.ColorDialog1.Color = Label1.ForeColor
@@ -1064,8 +1167,8 @@ ByVal dwReserved As Int32) As Boolean
 
             Label1.ForeColor = ColorDialog1.Color
             Label2.ForeColor = ColorDialog1.Color
-            My.Settings.colore = ColorDialog1.Color
-            My.Settings.Save()
+            colore = ColorDialog1.Color
+            salvaconfig("colore", colore)
 
         End If
         ritorna = False
@@ -1075,14 +1178,14 @@ ByVal dwReserved As Int32) As Boolean
         If coloriautomatici Then
             Return
         End If
-        Me.ColorDialog1.Color = My.Settings.coloredown
+        Me.ColorDialog1.Color = coloredown
         ritorna = True
         If ColorDialog1.ShowDialog <> Windows.Forms.DialogResult.Cancel Then
 
-            My.Settings.coloredown = ColorDialog1.Color
-            My.Settings.Save()
+            coloredown = ColorDialog1.Color
+
             cambiagiu()
-            ''salvaconfig("downcolor", ColorDialog1.Color.Name.ToString.ToLower)
+            salvaconfig("coloredown", coloredown)
         End If
         ritorna = False
     End Sub
@@ -1091,18 +1194,19 @@ ByVal dwReserved As Int32) As Boolean
         If coloriautomatici Then
             Return
         End If
-        Me.ColorDialog1.Color = My.Settings.coloreup
+        Me.ColorDialog1.Color = coloreup
         ritorna = True
         If ColorDialog1.ShowDialog <> Windows.Forms.DialogResult.Cancel Then
 
-            My.Settings.coloreup = ColorDialog1.Color
-            My.Settings.Save()
+            coloreup = ColorDialog1.Color
+            salvaconfig("coloreup", coloreup)
             cambiasu()
             '' salvaconfig("upcolor", ColorDialog1.Color.Name.ToString.ToLower)
         End If
         ritorna = False
     End Sub
     Dim bandwidth As String = "Mb"
+    Dim banda As String
     Private Sub GBToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles GBToolStripMenuItem.Click
         bandwidth = "GB"
         Try
@@ -1113,8 +1217,8 @@ ByVal dwReserved As Int32) As Boolean
 
         End Try
         GBToolStripMenuItem.Checked = True
-        My.Settings.banda = bandwidth
-        My.Settings.Save()
+        banda = bandwidth
+        salvaconfig("banda", banda)
     End Sub
 
     Private Sub GbToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles GbToolStripMenuItem1.Click
@@ -1127,8 +1231,8 @@ ByVal dwReserved As Int32) As Boolean
 
         End Try
         GbToolStripMenuItem1.Checked = True
-        My.Settings.banda = bandwidth
-        My.Settings.Save()
+        banda = bandwidth
+        salvaconfig("banda", banda)
     End Sub
 
 
@@ -1142,8 +1246,8 @@ ByVal dwReserved As Int32) As Boolean
 
         End Try
         MBToolStripMenuItem.Checked = True
-        My.Settings.banda = bandwidth
-        My.Settings.Save()
+        banda = bandwidth
+        salvaconfig("banda", banda)
     End Sub
 
     Private Sub MbToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles MbToolStripMenuItem1.Click
@@ -1156,8 +1260,8 @@ ByVal dwReserved As Int32) As Boolean
 
         End Try
         MbToolStripMenuItem1.Checked = True
-        My.Settings.banda = bandwidth
-        My.Settings.Save()
+        banda = bandwidth
+        salvaconfig("banda", banda)
 
     End Sub
 
@@ -1171,8 +1275,8 @@ ByVal dwReserved As Int32) As Boolean
 
         End Try
         KBToolStripMenuItem.Checked = True
-        My.Settings.banda = bandwidth
-        My.Settings.Save()
+        banda = bandwidth
+        salvaconfig("banda", banda)
     End Sub
 
     Private Sub KbToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles KbToolStripMenuItem1.Click
@@ -1185,8 +1289,8 @@ ByVal dwReserved As Int32) As Boolean
 
         End Try
         KbToolStripMenuItem1.Checked = True
-        My.Settings.banda = bandwidth
-        My.Settings.Save()
+        banda = bandwidth
+        salvaconfig("banda", banda)
     End Sub
 
     Private Sub ContextMenuStrip1_Opening(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles ContextMenuStrip1.Opening
@@ -1213,13 +1317,9 @@ ByVal dwReserved As Int32) As Boolean
             SpostamiToolStripMenuItem.Visible = False
             bloccaposizione = True
         End If
-        If bloccaposizione Then
-            My.Settings.bloccaposizione = "si"
-        Else
-            My.Settings.bloccaposizione = "no"
-        End If
-        My.Settings.Save()
-        ''salvaconfig("bloccaposizione", My.Settings.bloccaposizione)
+
+        salvaconfig("bloccaposizione", bloccaposizione)
+        ''salvaconfig("bloccaposizione", bloccaposizione)
     End Sub
 
     Private Sub speedmeter_Shown(sender As Object, e As EventArgs) Handles Me.Shown
@@ -1252,12 +1352,9 @@ ByVal dwReserved As Int32) As Boolean
             SelezionaColoreUploadToolStripMenuItem1.Visible = False
             SelezionaCororeTestoToolStripMenuItem.Visible = False
         End If
-        If coloriautomatici Then
-            My.Settings.coloriautomatici = "si"
-        Else
-            My.Settings.coloriautomatici = "no"
-        End If
-        My.Settings.Save()
+
+        salvaconfig("coloriautomatici", coloriautomatici)
+        caricaconfig()
     End Sub
 
     Private Sub AboutToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AboutToolStripMenuItem.Click
@@ -1286,12 +1383,13 @@ ByVal dwReserved As Int32) As Boolean
     End Sub
 
     Private Sub EffettuaUnoSpeedTestToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles EffettuaUnoSpeedTestToolStripMenuItem.Click
-        Process.Start("microsoft-edge:" & My.Settings.speedtest)
+        Process.Start("microsoft-edge:" & speedtest)
     End Sub
 
+    Dim speedtest As String
     Private Sub CambiaLinkSpeedTestToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CambiaLinkSpeedTestToolStripMenuItem.Click
         ritorna = True
-        Dim StatusDate = InputBox("Inserisci il nuovo link per eddettuare lo SpeedTest (esempio: speedtest.net)", "Modifica link Speedtest", My.Settings.speedtest)
+        Dim StatusDate = InputBox("Inserisci il nuovo link per eddettuare lo SpeedTest (esempio: speedtest.net)", "Modifica link Speedtest", speedtest)
         If StatusDate.Trim = "" Then
             ritorna = False
             Exit Sub
@@ -1300,8 +1398,8 @@ ByVal dwReserved As Int32) As Boolean
             StatusDate = "http://" & StatusDate
         End If
         ritorna = False
-        My.Settings.speedtest = StatusDate
-        My.Settings.Save()
+        speedtest = StatusDate
+        salvaconfig("speedtest", speedtest)
     End Sub
 
     Private Sub SpeedTestToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SpeedTestToolStripMenuItem.Click

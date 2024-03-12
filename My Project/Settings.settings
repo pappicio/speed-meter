@@ -1,39 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="My" GeneratedClassName="MySettings" UseMySettingsClassName="true">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" UseMySettingsClassName="true">
   <Profiles />
-  <Settings>
-    <Setting Name="posizione" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">-1</Value>
-    </Setting>
-    <Setting Name="font" Type="System.Drawing.Font" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="nic" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="banda" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Mb</Value>
-    </Setting>
-    <Setting Name="bloccaposizione" Type="System.String" Scope="User">
-      <Value Profile="(Default)">si</Value>
-    </Setting>
-    <Setting Name="colore" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="coloredown" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="coloreup" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="coloriautomatici" Type="System.String" Scope="User">
-      <Value Profile="(Default)">si</Value>
-    </Setting>
-    <Setting Name="speedtest" Type="System.String" Scope="User">
-      <Value Profile="(Default)">http://10.111.253.2/</Value>
-    </Setting>
-    <Setting Name="Impostazione" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-  </Settings>
+  <Settings />
 </SettingsFile>
