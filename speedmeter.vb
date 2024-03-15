@@ -300,7 +300,11 @@ Public Class speedmeter
         If IO.File.Exists(String.Concat(Application.StartupPath, "\speed-meter.cfg")) = False Then
             Exit Sub
         End If
-        speedtest = "http://10.111.253.2"
+        If speedtest = "" Then
+            speedtest = "http://10.111.253.2"
+            salvaconfig("speedtest", speedtest)
+        End If
+
 
 
         fontx = New Font("Microsoft Sans Serif", 12, FontStyle.Regular)
@@ -1100,7 +1104,7 @@ ByVal dwReserved As Int32) As Boolean
         If IO.File.Exists(Application.StartupPath & "\speed-meter.cfg") = False Then
             Dim file As System.IO.StreamWriter
             file = My.Computer.FileSystem.OpenTextFileWriter(Application.StartupPath & "\speed-meter.cfg", True)
-            file.WriteLine("'nessun coimmecto please!!!")
+            file.WriteLine("' ")
             file.Close()
             file.Dispose()
         End If
