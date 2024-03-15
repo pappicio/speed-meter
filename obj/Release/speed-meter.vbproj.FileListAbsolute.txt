@@ -13,3 +13,4 @@ c:\temp\speed-meter.exe
 c:\temp\speed-meter.pdb
 c:\temp\speed-meter.xml
 c:\temp\speed-meter.exe.config
+D:\speed-meter\speed-meter\obj\Release\speed-meter.vbproj.AssemblyReference.cache

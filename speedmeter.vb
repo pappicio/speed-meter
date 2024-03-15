@@ -297,14 +297,13 @@ Public Class speedmeter
 
     Sub caricaconfig()
 
-        If IO.File.Exists(String.Concat(Application.StartupPath, "\speed-meter.cfg")) = False Then
-            Exit Sub
-        End If
-        If speedtest = "" Then
-            speedtest = "http://10.111.253.2"
-            salvaconfig("speedtest", speedtest)
-        End If
-
+        If IO.File.Exists(Application.StartupPath & "\speed-meter.cfg") = False Then
+                Dim file As System.IO.StreamWriter
+                file = My.Computer.FileSystem.OpenTextFileWriter(Application.StartupPath & "\speed-meter.cfg", True)
+                file.WriteLine("' ")
+                file.Close()
+                file.Dispose()
+            End If
 
 
         fontx = New Font("Microsoft Sans Serif", 12, FontStyle.Regular)
@@ -476,6 +475,10 @@ Public Class speedmeter
         streamReader.Close()
         streamReader.Dispose()
 
+        If speedtest = "" Then
+            speedtest = "http://10.111.253.2"
+            salvaconfig("speedtest", speedtest)
+        End If
 
         lastedit = IO.File.GetLastWriteTime(Application.StartupPath & "\speed-meter.cfg")
 
@@ -746,6 +749,7 @@ ByVal dwReserved As Int32) As Boolean
         If nic.Trim = "" Then
             nic = Nothing
         End If
+
         net = Nothing
         Dim nics As New List(Of NetworkInterface)
         Try
@@ -824,6 +828,9 @@ ByVal dwReserved As Int32) As Boolean
             net = Nothing
 
         End Try
+        maxdown = 0
+        maxup = 0
+
     End Sub
     Dim colore As Color
     Dim maxup, maxdown As Double

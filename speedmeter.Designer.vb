@@ -91,7 +91,7 @@ Partial Class speedmeter
         Me.ContextMenuStrip1.ImageScalingSize = New System.Drawing.Size(20, 20)
         Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SpostamiToolStripMenuItem, Me.ToolStripSeparator2, Me.SelezioneNetworkToolStripMenuItem, Me.ToolStripSeparator1, Me.SeelzionaFontTestoToolStripMenuItem, Me.SelezionaCororeTestoToolStripMenuItem, Me.ToolStripSeparator5, Me.SelezioneColoreDownloadToolStripMenuItem, Me.SelezionaColoreUploadToolStripMenuItem1, Me.ToolStripSeparator3, Me.SelezionaBandWidthToolStripMenuItem, Me.ToolStripSeparator9, Me.SpeedTestToolStripMenuItem, Me.ToolStripSeparator4, Me.VisualizzaIToolStripMenuItem, Me.ToolStripSeparator7, Me.ColoriAutomaticiToolStripMenuItem, Me.ToolStripSeparator6, Me.AboutToolStripMenuItem, Me.ToolStripSeparator8})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(264, 350)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(264, 322)
         '
         'SpostamiToolStripMenuItem
         '
@@ -323,7 +323,7 @@ Partial Class speedmeter
         Me.PictureBox3.BackColor = System.Drawing.Color.Transparent
         Me.PictureBox3.ContextMenuStrip = Me.ContextMenuStrip1
         Me.PictureBox3.Image = Global.speed_meter.My.Resources.Resources.su
-        Me.PictureBox3.Location = New System.Drawing.Point(0, 31)
+        Me.PictureBox3.Location = New System.Drawing.Point(0, 25)
         Me.PictureBox3.Name = "PictureBox3"
         Me.PictureBox3.Size = New System.Drawing.Size(25, 33)
         Me.PictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
@@ -335,7 +335,7 @@ Partial Class speedmeter
         Me.PictureBox2.BackColor = System.Drawing.Color.Transparent
         Me.PictureBox2.ContextMenuStrip = Me.ContextMenuStrip1
         Me.PictureBox2.Image = Global.speed_meter.My.Resources.Resources.giu
-        Me.PictureBox2.Location = New System.Drawing.Point(0, -5)
+        Me.PictureBox2.Location = New System.Drawing.Point(0, 0)
         Me.PictureBox2.Name = "PictureBox2"
         Me.PictureBox2.Size = New System.Drawing.Size(25, 29)
         Me.PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
