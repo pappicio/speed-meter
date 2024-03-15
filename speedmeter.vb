@@ -881,15 +881,15 @@ ByVal dwReserved As Int32) As Boolean
 
             If maxdown < maxd Then
                 maxdown = maxd
-                DownloadToolStripMenuItem.Text = "Download: " & maxd & " " & band & "/s"
-            End If
 
+            End If
+            DownloadToolStripMenuItem.Text = "Download: " & maxdown & " " & band & "/s"
 
             If maxup < maxu Then
                 maxup = maxu
-                UploadToolStripMenuItem.Text = "Upload: " & maxu & " " & band & "/s"
-            End If
 
+            End If
+            UploadToolStripMenuItem.Text = "Upload: " & maxup & " " & band & "/s"
 
             PictureBox1.Top = 10
             PictureBox1.Left = Label1.Left
