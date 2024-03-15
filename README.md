@@ -5,6 +5,8 @@ tasto destro del mouse sulle frecce per il menu contestuale (grandezza/font/colo
 (PER APRIRE IL MENU CONTESTUALE BASTA CLICCARE COL TASTO DX DEL MOUSE SULLA IMMAGINE DEL DOWNLOAD O UPLOAD)
 
 P.S.: Per farlo eseguire in esecuzione automatica per tutti gli utenti, basta eseguirlo la prima volta come Administrator e creerà un link in esecuzione automatica per allusers!
+
+
 versione 4.3.3
 
 piccolo tool per tenere sotto controllo il il traffico internet (velocita di Download/Upload)
