@@ -718,28 +718,16 @@ ByVal dwReserved As Int32) As Boolean
     Dim LocalIPAddress As String
 
     Private Sub mnuItem_Clicked(sender As Object, e As EventArgs)
-        Dim nic As Object
+
         Try
             ContextMenuStrip1.Hide() 'Sometimes the menu items can remain open.  May not be necessary for you.
 
             Dim item As ToolStripMenuItem = TryCast(sender, ToolStripMenuItem)
             If item IsNot Nothing Then
                 net = item.Tag
-
-
-                Try
-                    For Each i As ToolStripMenuItem In SelezioneNetworkToolStripMenuItem.DropDownItems
-                        If nic <> "" And nic.ToString.ToLower.Trim = i.Text.ToString.ToLower.Trim Then
-                            i.Checked = False
-                        End If
-                    Next
-                Catch ex As Exception
-
-                End Try
-
-                item.Checked = True
                 nic = net.Description
                 salvaconfig("nic", nic)
+                loadnic()
             End If
         Catch ex As Exception
 
@@ -751,7 +739,11 @@ ByVal dwReserved As Int32) As Boolean
 
     Dim nic As String = Nothing
     Private Sub loadnic()
-
+        If nic.Trim = "" Then
+            nic = Nothing
+        End If
+        net = Nothing
+        Dim nics As New List(Of NetworkInterface)
         Try
             SelezioneNetworkToolStripMenuItem.DropDownItems.Clear()
             RemoveHandler menu2.Click, AddressOf mnuItem_Clicked
@@ -777,17 +769,12 @@ ByVal dwReserved As Int32) As Boolean
                                     If item.DropDownItems.Contains(menu2) = False Then
                                         item.DropDownItems.Add(menu2)
                                         AddHandler menu2.Click, AddressOf mnuItem_Clicked
-                                    End If
-
-                                    If ce = False Then
-                                        net = network
-                                        ce = True
-                                        menu2.Checked = True
+                                        nics.Add(network)
                                     End If
                                 End If
                             Next
                         Catch ex As Exception
-                            net = Nothing
+
                         End Try
 
                     End If
@@ -795,41 +782,42 @@ ByVal dwReserved As Int32) As Boolean
                 End If
             Next
 
-            Dim esiste As Boolean = False
-
             Try
-                For Each item As ToolStripMenuItem In SelezioneNetworkToolStripMenuItem.DropDownItems
-                    If nic IsNot Nothing Then
-                        If nic.ToString.ToLower.Trim = item.Text.ToString.ToLower.Trim Then
-
-                            esiste = True
+                If nic IsNot Nothing Then
+                    For x As Integer = 0 To nics.Count - 1
+                        If nics(x).Description.ToLower.Trim = nic.ToLower.Trim Then
+                            net = nics(x)
+                            Dim item As Object = SelezioneNetworkToolStripMenuItem.DropDownItems(x)
+                            item.checked = True
                             Exit For
                         End If
-
-                    Else
-                        nic = ""
-                    End If
-                Next
-            Catch ex As Exception
-
-            End Try
-            If esiste Then
-                Try
-                    For Each item As ToolStripMenuItem In SelezioneNetworkToolStripMenuItem.DropDownItems
-                        item.Checked = False
-                        If nic <> "" And nic.ToString.ToLower.Trim = item.Text.ToString.ToLower.Trim Then
-                            item.Checked = True
-                        End If
                     Next
-                Catch ex As Exception
+                Else
+                    net = nics(0)
+                    Dim item As Object = SelezioneNetworkToolStripMenuItem.DropDownItems(0)
+                    item.checked = True
 
-                End Try
-            End If
-
-
+                End If
+                If net Is Nothing Then
+                    Try
+                        net = nics(0)
+                        nic = net.Description
+                        Dim item As Object = SelezioneNetworkToolStripMenuItem.DropDownItems(0)
+                        item.checked = True
+                        salvaconfig("nic", nic)
+                    Catch ex As Exception
+                        net = Nothing
+                        nic = Nothing
+                    End Try
+                End If
+            Catch ex As Exception
+                net = Nothing
+                nic = Nothing
+            End Try
 
 
         Catch exception As System.Exception
+            net = Nothing
 
         End Try
     End Sub
@@ -1387,6 +1375,11 @@ ByVal dwReserved As Int32) As Boolean
     End Sub
 
     Dim speedtest As String
+
+    Private Sub SelezioneNetworkToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SelezioneNetworkToolStripMenuItem.Click
+
+    End Sub
+
     Private Sub CambiaLinkSpeedTestToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CambiaLinkSpeedTestToolStripMenuItem.Click
         ritorna = True
         Dim StatusDate = InputBox("Inserisci il nuovo link per eddettuare lo SpeedTest (esempio: speedtest.net)", "Modifica link Speedtest", speedtest)

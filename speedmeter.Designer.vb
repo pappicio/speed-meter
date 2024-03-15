@@ -91,7 +91,7 @@ Partial Class speedmeter
         Me.ContextMenuStrip1.ImageScalingSize = New System.Drawing.Size(20, 20)
         Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SpostamiToolStripMenuItem, Me.ToolStripSeparator2, Me.SelezioneNetworkToolStripMenuItem, Me.ToolStripSeparator1, Me.SeelzionaFontTestoToolStripMenuItem, Me.SelezionaCororeTestoToolStripMenuItem, Me.ToolStripSeparator5, Me.SelezioneColoreDownloadToolStripMenuItem, Me.SelezionaColoreUploadToolStripMenuItem1, Me.ToolStripSeparator3, Me.SelezionaBandWidthToolStripMenuItem, Me.ToolStripSeparator9, Me.SpeedTestToolStripMenuItem, Me.ToolStripSeparator4, Me.VisualizzaIToolStripMenuItem, Me.ToolStripSeparator7, Me.ColoriAutomaticiToolStripMenuItem, Me.ToolStripSeparator6, Me.AboutToolStripMenuItem, Me.ToolStripSeparator8})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(264, 322)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(264, 350)
         '
         'SpostamiToolStripMenuItem
         '
